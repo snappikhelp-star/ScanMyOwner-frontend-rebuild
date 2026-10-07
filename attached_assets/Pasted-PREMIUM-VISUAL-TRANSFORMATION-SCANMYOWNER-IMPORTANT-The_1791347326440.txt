@@ -1,0 +1,954 @@
+PREMIUM VISUAL TRANSFORMATION — SCANMYOWNER
+
+IMPORTANT:
+
+The current website is functional, but visually it is TOO SIMPLE, TOO WHITE, and does not feel like a premium product brand.
+
+DO NOT rebuild the backend.
+DO NOT touch Supabase.
+DO NOT touch authentication.
+DO NOT touch database.
+DO NOT touch payments.
+DO NOT touch QR logic.
+
+This task is ONLY a major visual/UI transformation of the existing frontend.
+
+The goal is NOT "change some colors".
+
+The goal is:
+
+MAKE THE WEBSITE LOOK LIKE A REAL PREMIUM, MODERN, CUSTOMER-ATTRACTING PRODUCT BRAND.
+
+==================================================
+BRAND
+==================================================
+
+Brand:
+
+ScanMyOwner
+
+Tagline:
+
+Scan. Connect. Stay Private.
+
+Product:
+
+Smart QR contact tags for vehicles and eventually personal belongings.
+
+==================================================
+DESIGN REFERENCE
+==================================================
+
+Use this website as a general visual reference:
+
+https://callmyowner.app/
+
+IMPORTANT:
+
+DO NOT copy its design.
+
+DO NOT copy its text.
+DO NOT copy its illustrations.
+DO NOT copy its exact layout.
+DO NOT copy its branding.
+
+Use only the design philosophy:
+
+- extremely clean
+- simple product explanation
+- strong visual hierarchy
+- product-first
+- mobile-first
+- lots of whitespace
+- friendly
+- modern
+- trustworthy
+
+Our website must have its OWN identity.
+
+==================================================
+MAIN PROBLEM TO FIX
+==================================================
+
+The current website feels:
+
+- too white
+- too plain
+- too much empty space
+- weak visual hierarchy
+- not enough brand colour
+- generic
+- not memorable
+- not premium enough
+- insufficient product visualization
+
+FIX ALL OF THESE.
+
+IMPORTANT:
+
+Do NOT turn the website into a colourful children's website.
+
+We need:
+
+PREMIUM + FRIENDLY + MODERN.
+
+==================================================
+NEW COLOR SYSTEM
+==================================================
+
+Use these colours strongly throughout the UI.
+
+LEAF GREEN
+#2E7D32
+
+BRIGHT GREEN
+#43A047
+
+DEEP FOREST
+#164A2B
+
+BRIGHT ORANGE
+#FF7A00
+
+ORANGE LIGHT
+#FFF0E3
+
+CREAM
+#FFF8E8
+
+PALE YELLOW
+#FFF3C4
+
+MINT
+#E8F7EC
+
+LIGHT MINT
+#F3FBF5
+
+WHITE
+#FFFFFF
+
+TEXT
+#17221A
+
+SECONDARY TEXT
+#647067
+
+BORDER
+#D9E7DC
+
+==================================================
+COLOR BALANCE
+==================================================
+
+THIS IS VERY IMPORTANT.
+
+The previous website was too white.
+
+Do NOT make every section white.
+
+Use a deliberate visual rhythm:
+
+SECTION 1:
+Very light mint / white
+
+SECTION 2:
+White
+
+SECTION 3:
+Mint green
+
+SECTION 4:
+White
+
+SECTION 5:
+Cream / pale yellow
+
+SECTION 6:
+White
+
+SECTION 7:
+Light mint
+
+SECTION 8:
+White
+
+FINAL CTA:
+Deep forest green
+
+This should make the page visually interesting while remaining premium.
+
+==================================================
+HERO — MAJOR REDESIGN
+==================================================
+
+The hero MUST become much more visually impressive.
+
+Create a soft mint-green hero background:
+
+#F3FBF5
+
+Add subtle organic green shapes in the background.
+
+NOT random blobs.
+
+Use very subtle large curved shapes / radial gradients.
+
+Left side:
+
+Small label:
+
+SMART QR CONTACT
+
+Headline:
+
+"Need to reach the owner?
+Just scan."
+
+Highlight:
+
+"Just scan."
+
+Use green typography.
+
+Supporting text:
+
+"One smart QR tag that lets people contact you when your vehicle needs your attention — without exposing your personal number."
+
+Buttons:
+
+GET YOUR QR TAG
+HOW IT WORKS
+
+Primary:
+Green background.
+
+Secondary:
+White background with green border.
+
+Under buttons:
+
+✓ Private contact
+✓ No app needed
+✓ Works with any phone
+
+RIGHT SIDE:
+
+THIS IS THE MOST IMPORTANT VISUAL.
+
+Create a premium product scene.
+
+Show:
+
+A modern car illustration / clean vehicle silhouette.
+
+Place a physical-looking ScanMyOwner QR tag on the vehicle.
+
+Next to it:
+
+A smartphone mockup.
+
+Phone screen should show:
+
+ScanMyOwner
+
+"How can we help?"
+
+NO PARKING
+LIGHTS ON
+EMERGENCY
+KEY LOST
+
+Add a small floating orange notification:
+
+"Owner contact request"
+
+Add another tiny green notification:
+
+"Private connection"
+
+The phone should look like a real premium mobile product UI.
+
+The car + phone + QR tag should form ONE composition.
+
+Do not make them look like separate random cards.
+
+==================================================
+HERO VISUAL STYLE
+==================================================
+
+Use:
+
+- green glow
+- orange accent
+- soft shadows
+- white phone
+- mint background
+- clean product illustration
+
+Do NOT use:
+
+- 3D renders
+- gaming style
+- neon
+- dark futuristic graphics
+- excessive glassmorphism
+
+==================================================
+BRAND COLOR DETAILS
+==================================================
+
+Introduce small orange accents throughout the website.
+
+Examples:
+
+Orange:
+notification dot
+small icon
+highlight
+tiny underline
+status indicator
+special badge
+
+Green:
+buttons
+headings
+icons
+product identity
+
+Mint:
+large backgrounds
+
+Cream:
+special sections
+
+This creates a recognizable visual identity.
+
+==================================================
+NAVBAR
+==================================================
+
+Make navbar more branded.
+
+Logo:
+
+Create a simple ScanMyOwner wordmark.
+
+Use:
+
+SCAN
+in dark green
+
+MYOWNER
+in green
+
+Add a tiny orange dot/accent.
+
+Navbar should have:
+
+How It Works
+Features
+Pricing
+FAQ
+
+Login
+
+GET YOUR TAG
+
+Get Your Tag button:
+green.
+
+Navbar:
+white with slight transparency / blur.
+
+Subtle shadow only.
+
+==================================================
+TRUST BAR
+==================================================
+
+Instead of boring text, create a mint-green horizontal strip.
+
+Four items:
+
+PRIVATE CONTACT
+UNIQUE QR
+NO APP REQUIRED
+EASY ACTIVATION
+
+Use green icons.
+
+Add tiny orange indicators.
+
+Keep it compact.
+
+==================================================
+PROBLEM SECTION
+==================================================
+
+Create a cream background:
+
+#FFF8E8
+
+Heading:
+
+"Sometimes your vehicle needs you."
+
+Create an attractive asymmetric layout.
+
+Large card:
+
+NO PARKING
+
+Smaller cards:
+
+LIGHTS ON
+KEY LOST
+EMERGENCY
+
+Cards should use different visual treatments.
+
+Do NOT make four identical white cards.
+
+Example:
+
+No Parking:
+large cream/white card with orange accent.
+
+Lights On:
+mint card.
+
+Emergency:
+soft orange card.
+
+Key Lost:
+white card with green accent.
+
+This section should have personality.
+
+==================================================
+HOW IT WORKS
+==================================================
+
+Background:
+WHITE
+
+Heading:
+
+"From scan to contact in seconds."
+
+Create 3 large visual steps:
+
+01
+SCAN
+
+02
+CHOOSE
+
+03
+CONNECT
+
+Between them use a thin green path/line.
+
+Each step should have a small product visual.
+
+SCAN:
+QR tag
+
+CHOOSE:
+phone UI
+
+CONNECT:
+private contact UI
+
+Use green and orange accents.
+
+==================================================
+PHONE PRODUCT DEMO
+==================================================
+
+Make this section strongly visual.
+
+Background:
+
+LIGHT MINT
+#E8F7EC
+
+Heading:
+
+"One scan. The right message."
+
+Large phone mockup in center.
+
+Inside phone:
+
+"How can we help?"
+
+Buttons:
+
+🚗 No Parking
+💡 Lights On
+🚨 Emergency
+🔑 Key Lost
+🛠 Vehicle Issue
+💬 Other
+
+Make the buttons visually premium.
+
+Use different subtle background colours:
+
+No Parking:
+soft orange
+
+Lights On:
+pale yellow
+
+Emergency:
+soft red/pink
+
+Key Lost:
+mint
+
+Vehicle Issue:
+light blue
+
+Other:
+white
+
+This section should demonstrate that the product is not just "a QR code".
+
+==================================================
+PRIVACY SECTION
+==================================================
+
+Background:
+
+CREAM
+#FFF8E8
+
+Headline:
+
+"Your number stays private."
+
+Create a visual flow:
+
+PERSON
+↓
+SCANMYOWNER
+↓
+OWNER
+
+Add a large green shield/lock visual.
+
+Use orange as a small accent.
+
+Make this section warm and trustworthy.
+
+Do NOT make it look like cybersecurity software.
+
+==================================================
+VEHICLE CONFIGURATOR
+==================================================
+
+Make the vehicle configurator visually premium.
+
+Background:
+
+WHITE
+
+Heading:
+
+"Make your tag feel like yours."
+
+Show:
+
+CAR
+BIKE
+SCOOTER
+SUV
+VAN
+
+Create modern segmented controls.
+
+Then:
+
+Brand
+Model
+Color
+
+Color choices should be visually represented as circles.
+
+WHITE
+BLACK
+SILVER
+GREY
+BLUE
+RED
+GREEN
+YELLOW
+ORANGE
+
+Show a vehicle preview.
+
+When user changes colour:
+vehicle preview changes.
+
+Use subtle transitions.
+
+==================================================
+FEATURE BENTO
+==================================================
+
+Background:
+
+LIGHT MINT
+
+Heading:
+
+"Small tag.
+Big peace of mind."
+
+Create a PREMIUM BENTO GRID.
+
+Do not make 6 equal cards.
+
+Use:
+
+1 large card:
+PRIVATE CONTACT
+
+2 medium:
+NO APP REQUIRED
+UNIQUE QR
+
+3 small:
+EASY ACTIVATION
+MULTIPLE USES
+
+Add a large visual QR/product element inside the main card.
+
+Use green + orange accents.
+
+==================================================
+PRODUCT EXPANSION
+==================================================
+
+Background:
+
+WHITE
+
+Heading:
+
+"More than just a car tag."
+
+Create a horizontal visual lineup:
+
+CAR
+BIKE
+SCOOTER
+HELMET
+KEYS
+LUGGAGE
+PET
+
+Use simple clean illustrations/icons.
+
+Each item should have a subtle colour background.
+
+Do not use random emoji as the final design.
+
+Use Lucide icons or CSS/vector visuals.
+
+==================================================
+PRICING
+==================================================
+
+Background:
+
+CREAM
+
+Heading:
+
+"Start simple."
+
+Cards:
+
+BASIC
+₹399
+
+SMART
+₹499
+
+SMART should have a green outline and small orange:
+
+MOST POPULAR
+
+Primary buttons green.
+
+Pricing cards should feel premium.
+
+Do NOT make them huge.
+
+==================================================
+FAQ
+==================================================
+
+White background.
+
+Clean accordion.
+
+Use green plus/minus icons.
+
+Add subtle hover background:
+
+#F3FBF5
+
+==================================================
+FINAL CTA
+==================================================
+
+Deep Forest Green:
+
+#164A2B
+
+Headline:
+
+"Your vehicle.
+Your privacy.
+One simple scan."
+
+White text.
+
+Button:
+
+GET YOUR QR TAG
+
+Button should be orange:
+
+#FF7A00
+
+This is the ONE place where orange becomes the main CTA.
+
+Add a small white QR tag visual.
+
+Add subtle green glow.
+
+==================================================
+FOOTER
+==================================================
+
+Dark green footer.
+
+Keep it clean.
+
+ScanMyOwner logo.
+
+"Scan. Connect. Stay Private."
+
+Links.
+
+Use small orange accent line.
+
+==================================================
+ANIMATION
+==================================================
+
+IMPORTANT.
+
+Current animation should NOT become worse.
+
+Use very subtle premium motion.
+
+Allowed:
+
+fade
+slide 10–20px
+scale 1.01–1.03
+hover elevation
+button colour transition
+QR scan line
+phone UI transition
+
+Do NOT use:
+
+bounce
+spin
+large parallax
+cards flying around
+infinite floating objects
+cursor-following
+huge text animation
+excessive blur
+random particles
+
+Animation should feel like:
+
+Apple product website
+
+NOT:
+
+AI template demo.
+
+Respect prefers-reduced-motion.
+
+==================================================
+VISUAL DETAILS
+==================================================
+
+Add visual depth using:
+
+- soft shadows
+- 1px borders
+- coloured section backgrounds
+- subtle gradients
+- large product visuals
+- small orange accents
+- green highlights
+- clean icons
+
+DO NOT simply add gradients everywhere.
+
+==================================================
+IMPORTANT — MAKE IT COLORFUL
+==================================================
+
+The current website feels almost completely white.
+
+After this update, every major section should have a deliberate visual identity.
+
+The page should visually flow:
+
+MINT
+↓
+WHITE
+↓
+CREAM
+↓
+WHITE
+↓
+MINT
+↓
+CREAM
+↓
+WHITE
+↓
+DARK GREEN
+
+This is extremely important.
+
+==================================================
+CUSTOMER PSYCHOLOGY
+==================================================
+
+The website should make a visitor think:
+
+"This looks like a real product."
+
+"This looks trustworthy."
+
+"I understand what it does immediately."
+
+"I would actually put this QR tag on my car."
+
+"I want to see the product."
+
+Therefore prioritize:
+
+PRODUCT VISUALS
+COLOUR
+TRUST
+SIMPLICITY
+CLEAR CTA
+
+over:
+
+LONG TEXT
+TECHNICAL DETAILS
+ANIMATIONS
+
+==================================================
+PERFORMANCE
+==================================================
+
+Do NOT install heavy packages.
+
+Do NOT install:
+
+Three.js
+React Three Fiber
+GSAP
+large animation libraries
+
+Use existing React/Tailwind/Lucide.
+
+Use CSS wherever possible.
+
+==================================================
+DO NOT CHANGE
+==================================================
+
+Do NOT touch:
+
+Supabase
+Auth
+Database
+RLS
+Razorpay
+Exotel
+Call masking
+Backend
+API
+real QR generation
+
+Only visual frontend.
+
+==================================================
+FINAL TEST
+==================================================
+
+After implementation:
+
+1. Run the app.
+2. Check desktop.
+3. Check mobile.
+4. Check 360px width.
+5. Check 390px width.
+6. Check 1440px width.
+7. Check all existing routes.
+8. Fix TypeScript errors.
+9. Fix console errors.
+10. Fix overflow.
+11. Check every CTA.
+12. Check colour contrast.
+13. Check animations.
+14. Remove unnecessary animation.
+
+MOST IMPORTANT:
+
+DO NOT JUST CHANGE THE HEX COLORS.
+
+REDESIGN THE VISUAL COMPOSITION.
+
+The final result must be:
+
+PREMIUM
+COLOURFUL
+CLEAN
+MEMORABLE
+TRUSTWORTHY
+PRODUCT-FOCUSED
+CUSTOMER-ATTRACTIVE
+
+The user should immediately notice the green + orange ScanMyOwner identity.
+
+Make the website look like a real consumer technology product ready for launch.
+
+When finished, STOP.
+
+Report:
+- files changed
+- packages added
+- routes checked
+- build status
+- TypeScript status
+- remaining issues
