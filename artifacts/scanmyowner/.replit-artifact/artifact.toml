@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "ScanMyOwner"
+description = "A frontend website for ScanMyOwner, a smart QR contact tag that helps people reach vehicle owners privately when it matters."
+version = "1.0.0"
+id = "artifacts/scanmyowner"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23891
+
+[services.development]
+run = "pnpm --filter @workspace/scanmyowner run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/scanmyowner", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/scanmyowner/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23891"
+BASE_PATH = "/"
