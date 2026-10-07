@@ -40,7 +40,7 @@ function Meta({ title, description }: { title: string; description: string }) {
 function Brand({ footer = false }: { footer?: boolean }) {
   return <Link href="/" className="brand" data-testid={footer ? 'link-footer-brand' : 'link-brand-home'}>
     <img src={logo} alt="ScanMyOwner logo" data-testid="img-brand-logo" />
-    <span className="brand-word">ScanMyOwner<small>SMART QR CONTACT</small></span>
+    <span className="brand-word"><span>SCAN</span><strong>MYOWNER</strong><i aria-hidden="true" /><small>SMART QR CONTACT</small></span>
   </Link>;
 }
 
@@ -74,7 +74,7 @@ function Footer() {
   return <footer className="footer">
     <div className="container">
       <div className="footer-main">
-        <div><Brand footer /><p className="footer-desc">Smart QR contact tags for everyday life. Reach the owner when it matters, without sharing a personal number.</p></div>
+        <div><Brand footer /><p className="footer-desc">Scan. Connect. Stay Private.</p></div>
         <nav className="footer-links" aria-label="Footer navigation">
           <Link href="/how-it-works">How it works</Link><Link href="/#features">Features</Link>
           <Link href="/pricing">Pricing</Link><Link href="/faq">FAQ</Link><Link href="/contact">Contact</Link>
@@ -112,11 +112,11 @@ function SearchLookup() {
   </div>;
 }
 
-const trustLabels = ['PRIVATE BY DESIGN', 'NO NUMBER EXPOSED', 'NO APP NEEDED FOR SCANNER', 'ONE UNIQUE QR'];
+const trustLabels = ['PRIVATE CONTACT', 'UNIQUE QR', 'NO APP REQUIRED', 'EASY ACTIVATION'];
 function TrustStrip() {
   const icons = [ShieldCheck, LockKeyhole, Smartphone, Zap];
   return <div className="trust-strip"><div className="container strip-items">
-    {trustLabels.map((label, i) => { const Icon = icons[i]; return <div className="strip-item" key={label} data-testid={`trust-${i}`}><Icon size={17} strokeWidth={1.8} />{label}</div>; })}
+    {trustLabels.map((label, i) => { const Icon = icons[i]; return <div className="strip-item" key={label} data-testid={`trust-${i}`}><span className="strip-icon"><Icon size={17} strokeWidth={1.8} /><i /></span>{label}</div>; })}
   </div></div>;
 }
 
@@ -127,17 +127,27 @@ const situations = [
   { title: 'KEY LOST', text: 'Your keys were found.', Icon: KeyRound },
 ];
 function ProblemSection() {
-  return <section className="section" id="situations"><div className="container">
+  return <section className="section problem-section" id="situations"><div className="container">
     <div className="section-head"><Eyebrow>When it matters</Eyebrow><h2>Sometimes your vehicle needs you.</h2><p>Wrong parking. Lights left on. An emergency. A lost key. A simple message can save time.</p></div>
-    <div className="situation-grid">{situations.map(({ title, text, Icon }, i) => <article className="situation" key={title} data-testid={`card-situation-${i}`}><div className="icon-tile"><Icon size={20} /></div><h3>{title}</h3><p>{text}</p></article>)}</div>
+    <div className="situation-grid">{situations.map(({ title, text, Icon }, i) => <article className={`situation${i === 0 ? ' situation-primary' : ` situation-small situation-small-${i}`}`} key={title} data-testid={`card-situation-${i}`}>
+      <div className="icon-tile"><Icon size={20} /></div>{i === 0 && <span className="situation-kicker">A little message can help</span>}<h3>{title}</h3><p>{text}</p>
+      {i === 0 && <div className="parking-callout"><span className="parking-symbol">P</span><span><strong>Need to move?</strong><small>Send a private contact request.</small></span><ArrowRight size={17} /></div>}
+    </article>)}</div>
   </div></section>;
 }
 
 function HowSteps() {
   const steps = [['01', 'SCAN', 'Someone scans your ScanMyOwner QR tag.'], ['02', 'CHOOSE', 'They choose why they need to contact you.'], ['03', 'CONNECT', 'You receive the request and respond privately.']];
   return <section className="section steps-section" id="how"><div className="container">
-    <div className="section-head"><Eyebrow>Easy by design</Eyebrow><h2>Three simple steps.</h2><p>No app to install. No phone number on display. Just a more thoughtful way to connect.</p></div>
-    <div className="steps-grid">{steps.map(([number, title, desc]) => <article className="step" key={number} data-testid={`step-${number}`}><div className="step-number">{number}</div><h3>{title}</h3><p>{desc}</p></article>)}</div>
+    <div className="section-head"><Eyebrow>Easy by design</Eyebrow><h2>From scan to contact in seconds.</h2><p>No app to install. No phone number on display. Just a more thoughtful way to connect.</p></div>
+    <div className="steps-grid">{steps.map(([number, title, desc], i) => <article className={`step step-${i + 1}`} key={number} data-testid={`step-${number}`}>
+      <div className="step-visual" aria-hidden="true">
+        {i === 0 && <div className="step-qr"><img src={cardImage} alt="" /></div>}
+        {i === 1 && <div className="step-mini-phone"><strong>How can we help?</strong><span><CarFront size={14} />No parking</span><span><Zap size={14} />Lights on</span><span><MessageCircle size={14} />Emergency</span></div>}
+        {i === 2 && <div className="step-message"><span><LockKeyhole size={18} /></span><div><strong>Private connection</strong><small>Contact request delivered</small></div><Check size={17} /></div>}
+      </div>
+      <div className="step-number">{number}</div><h3>{title}</h3><p>{desc}</p>
+    </article>)}</div>
   </div></section>;
 }
 
@@ -159,7 +169,7 @@ function PhoneDemo() {
       </div>
       <p className="demo-note" data-testid="status-phone-demo">{selected ? `${selected} selected — this is a product preview.` : 'Interactive product preview'}</p>
     </div>
-    <div className="phone-copy"><Eyebrow>A better kind of contact</Eyebrow><h2>From a scan to a solution.</h2><p>A quick message can solve a small problem before it becomes a big one. The scanner chooses a reason and your contact details stay yours.</p>
+    <div className="phone-copy"><Eyebrow>A better kind of contact</Eyebrow><h2>One scan.<br />The right message.</h2><p>A quick message can solve a small problem before it becomes a big one. The scanner chooses a reason and your contact details stay yours.</p>
       <ul className="benefits">{['No number printed on your vehicle.', 'Anyone can scan with a phone camera.', 'Choose a reason before reaching out.', 'Contact stays private.'].map((b) => <li key={b}><span className="benefit-check"><Check size={14} /></span>{b}</li>)}</ul>
     </div>
   </div></section>;
@@ -167,10 +177,11 @@ function PhoneDemo() {
 
 function PrivacySection() {
   return <section className="section privacy-section" id="privacy"><div className="container privacy-layout">
-    <div><Eyebrow>Privacy, built in</Eyebrow><h2>Your number stays yours.</h2><p>Your QR tag connects people to you without putting your personal number on display. A simpler way to be reachable, on your terms.</p>
+    <div><Eyebrow>Privacy, built in</Eyebrow><h2>Your number stays private.</h2><p>Your QR tag connects people to you without putting your personal number on display. A simpler way to be reachable, on your terms.</p>
       <div className="privacy-points"><span><LockKeyhole size={14} />Private contact</span><span><MessageCircle size={14} />Simple communication</span><span><ShieldCheck size={14} />Less personal information exposed</span></div>
     </div>
     <div className="privacy-diagram" data-testid="diagram-private-contact">
+      <div className="privacy-shield"><ShieldCheck size={34} /><span>PRIVATE BY DESIGN</span><i /></div>
       <div className="flow-node"><Smartphone size={18} /> SCANNER</div><div className="flow-arrow"><ArrowDown size={18} /></div>
       <div className="flow-node brand-node"><img src={logo} alt="" /> SCANMYOWNER</div><div className="flow-arrow"><ArrowDown size={18} /></div>
       <div className="flow-node"><UserRound size={18} /> OWNER</div>
@@ -194,7 +205,7 @@ function VehicleConfigurator() {
   const isCar = type === 'CAR' || type === 'SUV' || type === 'VAN';
   const label = model.trim() || (type === 'CAR' ? 'Your vehicle' : `Your ${type.toLowerCase()}`);
   return <section className="section vehicle-section" id="vehicle"><div className="container">
-    <div className="section-head"><Eyebrow>Make it yours</Eyebrow><h2>Made for your vehicle.</h2><p>Choose your vehicle and a color to see a simple preview. This is a frontend demo — no vehicle details are saved.</p></div>
+    <div className="section-head"><Eyebrow>Make it yours</Eyebrow><h2>Make your tag feel like yours.</h2><p>Choose your vehicle and a color to see a simple preview. This is a frontend demo — no vehicle details are saved.</p></div>
     <div className="vehicle-layout">
       <div className="config-panel">
         <strong style={{ fontSize: 13, color: '#304336' }}>Your vehicle</strong>
@@ -224,9 +235,9 @@ const features = [
 ];
 function FeaturesBento() {
   return <section className="section features-section" id="features"><div className="container">
-    <div className="section-head"><Eyebrow>Thoughtful by design</Eyebrow><h2>Simple outside.<br />Smart inside.</h2><p>The little details are what make a simple idea feel right.</p></div>
+    <div className="section-head"><Eyebrow>Thoughtful by design</Eyebrow><h2>Small tag.<br />Big peace of mind.</h2><p>The little details are what make a simple idea feel right.</p></div>
     <div className="bento">{features.map(({ title, desc, Icon, long }) => <article className="feature" key={title} data-testid={`feature-${title.toLowerCase().replaceAll(' ', '-')}`}>
-      {long && <div className="feature-art"><img src={logo} alt="ScanMyOwner" style={{ width: 96, height: 96, objectFit: 'cover', borderRadius: 20 }} /></div>}
+      {long && <div className="feature-art"><div className="feature-qr-product"><img src={cardImage} alt="ScanMyOwner QR contact card" /><span><i /> UNIQUE TAG ID</span></div></div>}
       <div><Icon className="feature-icon" size={21} /><h3>{title}</h3><p>{desc}</p></div>
     </article>)}</div>
   </div></section>;
@@ -238,7 +249,7 @@ const categories = [
 ];
 function ProductExpansion() {
   return <section className="expansion-section"><div className="container"><div className="expansion-panel">
-    <Eyebrow>More than a vehicle</Eyebrow><h2>One tag today.<br />More possibilities tomorrow.</h2>
+    <Eyebrow>More than a car tag</Eyebrow><h2>More than just a car tag.</h2>
     <p>ScanMyOwner is growing into a smart-tag platform for the things and companions that are part of everyday life.</p>
     <div className="category-row">{categories.map(({ name, Icon }) => <div className="category" key={name} data-testid={`category-${name.toLowerCase()}`}><Icon size={17} />{name}</div>)}</div>
   </div></div></section>;
@@ -247,7 +258,7 @@ function ProductExpansion() {
 function PricingCards() {
   const plans = [{ name: 'BASIC', price: '₹399', smart: false }, { name: 'SMART', price: '₹499', smart: true }];
   return <section className="section pricing-section" id="pricing"><div className="container">
-    <div className="section-head"><Eyebrow>Simple, upfront pricing</Eyebrow><h2>Start with your vehicle.</h2><p>Choose the tag that feels right. Checkout is a preview only at this stage.</p></div>
+    <div className="section-head"><Eyebrow>Simple, upfront pricing</Eyebrow><h2>Start simple.</h2><p>Choose the tag that feels right. Checkout is a preview only at this stage.</p></div>
     <div className="pricing-grid">{plans.map((plan) => <article className={`price-card${plan.smart ? ' popular' : ''}`} key={plan.name} data-testid={`pricing-card-${plan.name.toLowerCase()}`}>
       {plan.smart && <span className="popular-label">MOST POPULAR</span>}
       <h3>{plan.name}</h3><div className="price" data-testid={`text-price-${plan.name.toLowerCase()}`}>{plan.price} <small>/ tag</small></div>
@@ -283,19 +294,30 @@ function FAQSection({ full = false }: { full?: boolean }) {
 
 function FinalCTA() {
   return <section className="cta"><div className="container cta-inner"><div><h2>Your vehicle.<br />Your privacy.<br />One simple scan.</h2><p>Give people a better way to reach you when it matters.</p></div>
-    <div className="cta-art"><img src={cardImage} alt="ScanMyOwner QR tag product card" /><Link className="btn btn-white" href="/vehicle" data-testid="button-final-get-tag">Get your QR tag <ArrowRight size={15} /></Link></div>
+    <div className="cta-art"><img src={cardImage} alt="ScanMyOwner QR tag product card" /><Link className="btn btn-orange" href="/vehicle" data-testid="button-final-get-tag">Get your QR tag <ArrowRight size={15} /></Link></div>
   </div></section>;
 }
 
 function Hero() {
   return <section className="hero"><div className="container hero-grid">
     <div><Eyebrow>SMART QR CONTACT</Eyebrow><h1>Need to reach the owner?<br />Just <em>scan.</em></h1>
-      <p className="hero-copy">ScanMyOwner gives every vehicle a simple QR identity — so people can reach you when your vehicle needs your attention, without exposing your personal number.</p>
+      <p className="hero-copy">One smart QR tag that lets people contact you when your vehicle needs your attention — without exposing your personal number.</p>
       <div className="hero-actions"><Link className="btn btn-primary" href="/vehicle" data-testid="button-hero-get-tag">Get your QR tag <ArrowRight size={16} /></Link><Link className="btn btn-outline" href="/how-it-works" data-testid="button-hero-how">How it works</Link></div>
-      <div className="trust-points"><span><Check size={14} />No app needed to scan</span><span><Check size={14} />Private contact</span><span><Check size={14} />Works with any phone</span></div>
+      <div className="trust-points"><span><Check size={14} />Private contact</span><span><Check size={14} />No app needed</span><span><Check size={14} />Works with any phone</span></div>
       <SearchLookup />
     </div>
-     <div className="hero-visual"><div className="hero-photo-frame"><img className="hero-vehicle-image" src={heroVehicleImage} alt="Photograph of a white compact SUV with a discreet QR contact tag on its windshield" data-testid="img-hero-vehicle" /><div className="hero-card-overlay"><img src={cardImage} alt="ScanMyOwner QR contact card" data-testid="img-qr-product-card" /></div></div><div className="product-badge"><span className="badge-icon"><LockKeyhole size={18} /></span><span><strong>Your number stays yours</strong>One scan. A private connection.</span></div></div>
+     <div className="hero-visual"><div className="hero-scene" data-testid="hero-product-scene">
+       <div className="hero-photo-frame"><img className="hero-vehicle-image" src={heroVehicleImage} alt="A modern white SUV with a ScanMyOwner contact tag on its windshield" data-testid="img-hero-vehicle" /><div className="hero-card-overlay"><img src={cardImage} alt="ScanMyOwner QR contact card" data-testid="img-qr-product-card" /></div><div className="hero-photo-caption"><i /> TAG SMO-247 · ACTIVE</div></div>
+       <div className="hero-phone" aria-label="ScanMyOwner phone preview">
+         <div className="hero-phone-notch" /><div className="hero-phone-status"><span>9:41</span><span>•••</span></div>
+         <div className="hero-phone-brand"><img src={logo} alt="" />ScanMyOwner</div>
+         <h2>How can we help?</h2><p>Choose a reason to reach the owner</p>
+         <div className="hero-phone-options">{reasons.slice(0, 4).map(({ label, Icon }, i) => <div className={`hero-phone-option hero-phone-option-${i + 1}`} key={label}><Icon size={14} /><span>{label}</span><ArrowRight size={12} /></div>)}</div>
+         <div className="hero-phone-private"><LockKeyhole size={11} />Your number stays private</div>
+       </div>
+       <div className="hero-alert hero-alert-request"><span className="hero-alert-icon"><MessageCircle size={16} /></span><span><strong>Owner contact request</strong><small>Someone needs your attention</small></span><i /></div>
+       <div className="hero-alert hero-alert-private"><LockKeyhole size={13} /><span>Private connection</span></div>
+     </div></div>
   </div></section>;
 }
 
