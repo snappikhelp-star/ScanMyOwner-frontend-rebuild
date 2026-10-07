@@ -1,44 +1,55 @@
-# [Project name]
+# ScanMyOwner
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A frontend demonstration of a vehicle QR contact tag that lets people preview contacting a vehicle owner privately.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- Start `artifacts/scanmyowner: web` in Replit Workflows — runs the website at `/`.
+- Start `artifacts/api-server: API Server` — runs the API at `/api`.
+- These managed workflows supply `PORT` and `BASE_PATH`; do not run the frontend dev command without them.
+- The imported Canvas workflow is optional and is not needed to run the website.
+- `pnpm install --frozen-lockfile` — install the existing workspace dependencies.
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- `curl http://localhost:80/api/healthz` — API health check; expected response: `{"status":"ok"}`.
+- No additional secrets or external services are required to run the current demo.
+- The unused database library requires `DATABASE_URL` if database-backed features are added later. No database was provisioned or migrated during import setup.
 
 ## Stack
 
-- pnpm workspaces, Node.js 24, TypeScript 5.9
+- pnpm workspaces, Node.js 20, TypeScript 5.9
+- Frontend: React 19, Vite 7, Tailwind CSS 4, Wouter
 - API: Express 5
-- DB: PostgreSQL + Drizzle ORM
+- DB library: PostgreSQL + Drizzle ORM (not used by the current app)
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
 - Build: esbuild (CJS bundle)
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/scanmyowner/` — website; pages in `src/App.tsx`, styles in `src/index.css`, brand images in `public/brand/`.
+- `artifacts/api-server/` — Express server; currently exposes only `/api/healthz`.
+- `artifacts/mockup-sandbox/` — imported optional canvas component previews.
+- `lib/api-spec/`, `lib/api-client-react/`, `lib/api-zod/` — shared API contract and generated clients/validation.
+- `lib/db/` — unused database library.
+- Each artifact's `.replit-artifact/artifact.toml` defines managed services and proxy routing.
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Import setup preserves the existing structure, stack, and demo behavior. Running the demo does not require implementing live backend features.
+- The API and frontend use Replit's shared path-based proxy; no additional Vite proxy is needed.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
-
-## User preferences
-
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Marketing homepage, pricing, how-it-works, FAQ, and contact pages.
+- Vehicle/tag customization and a sample tag page at `/t/demo123`.
+- Login, checkout, tag lookup, and owner-contact requests are explicitly frontend previews. They do not authenticate users, charge buyers, save vehicle details, or send messages.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Run the app through its managed workflows so the required port and base-path configuration is supplied.
+- Do not provision a database just to launch the frontend demo.
 
 ## Pointers
 
