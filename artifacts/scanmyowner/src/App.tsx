@@ -243,6 +243,42 @@ function FeaturesBento() {
   </div></section>;
 }
 
+const campaignImages = [
+  {
+    src: '/brand/campaign-vehicle-safe.webp',
+    alt: 'ScanMyOwner campaign showing a tagged vehicle with the message “Your Vehicle Always Safe.”',
+    className: 'campaign-card-wide',
+  },
+  {
+    src: '/brand/campaign-private-vehicle.webp',
+    alt: 'A ScanMyOwner tag on a white SUV with the message “Your Number Private. Your Vehicle Connected.”',
+  },
+  {
+    src: '/brand/campaign-no-parking.webp',
+    alt: 'A vehicle tag beside the message “No Parking? Lights On? Just Scan.”',
+  },
+  {
+    src: '/brand/campaign-scan-owner.webp',
+    alt: 'A car windshield tag and QR code with ways to contact the vehicle owner.',
+  },
+];
+function CampaignGallery() {
+  return <section className="section campaign-section" id="campaigns">
+    <div className="container">
+      <div className="section-head">
+        <Eyebrow>ScanMyOwner in everyday life</Eyebrow>
+        <h2>Stay connected. Keep your number private.</h2>
+        <p>A simple scan helps people reach you when your vehicle needs attention.</p>
+      </div>
+      <div className="campaign-gallery">
+        {campaignImages.map(({ src, alt, className }) => <figure className={`campaign-card${className ? ` ${className}` : ''}`} key={src}>
+          <img src={src} alt={alt} loading="lazy" />
+        </figure>)}
+      </div>
+    </div>
+  </section>;
+}
+
 const categories = [
   { name: 'Car', Icon: CarFront }, { name: 'Bike', Icon: Bike }, { name: 'Scooter', Icon: Bike },
   { name: 'Keys', Icon: KeyRound }, { name: 'Luggage', Icon: Package }, { name: 'Pets', Icon: Heart }, { name: 'Helmet', Icon: ShieldCheck },
@@ -323,7 +359,7 @@ function Hero() {
 
 function Home() {
   return <><Meta title="ScanMyOwner — Scan. Connect. Stay Private." description="A smart QR contact tag for your vehicle. Let people reach you when it matters, without exposing your personal number." />
-    <Shell><main><Hero /><TrustStrip /><ProblemSection /><HowSteps /><PhoneDemo /><PrivacySection /><VehicleConfigurator /><FeaturesBento /><ProductExpansion /><PricingCards /><FAQSection /><FinalCTA /></main></Shell>
+    <Shell><main><Hero /><TrustStrip /><ProblemSection /><HowSteps /><PhoneDemo /><PrivacySection /><VehicleConfigurator /><FeaturesBento /><CampaignGallery /><ProductExpansion /><PricingCards /><FAQSection /><FinalCTA /></main></Shell>
   </>;
 }
 
