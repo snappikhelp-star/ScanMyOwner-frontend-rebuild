@@ -13,7 +13,7 @@ import { Link, Route, Switch, useLocation, Router as WouterRouter } from 'wouter
 import NotFound from '@/pages/not-found';
 
 const queryClient = new QueryClient();
-const logo = '/brand/scanmyowner-logo.jpg';
+const logo = '/brand/scanmyowner-logo.webp';
 const cardImage = '/brand/qr-contact-card.jpg';
 const heroVehicleImage = '/brand/vehicle-lifestyle.jpg';
 const navItems = [
