@@ -14,7 +14,7 @@ import NotFound from '@/pages/not-found';
 
 const queryClient = new QueryClient();
 const logo = '/brand/scanmyowner-logo.webp';
-const cardImage = '/brand/qr-contact-card.jpg';
+const cardImage = '/brand/scanmyowner-qr-poster.png';
 const heroBannerImage = '/brand/campaign-vehicle-safe.webp';
 const parkingCampaignImage = '/brand/campaign-no-parking.webp';
 const privacyCampaignImage = '/brand/campaign-private-vehicle.webp';
