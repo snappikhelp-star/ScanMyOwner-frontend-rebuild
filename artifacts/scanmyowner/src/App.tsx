@@ -15,7 +15,7 @@ import NotFound from '@/pages/not-found';
 const queryClient = new QueryClient();
 const logo = '/brand/scanmyowner-logo.webp';
 const cardImage = '/brand/qr-contact-card.jpg';
-const heroBannerImage = '/brand/legacy-qr-contact.jpg';
+const heroBannerImage = '/brand/campaign-vehicle-safe.webp';
 const parkingCampaignImage = '/brand/campaign-no-parking.webp';
 const privacyCampaignImage = '/brand/campaign-private-vehicle.webp';
 const footerCampaignImage = '/brand/campaign-scan-owner.webp';
@@ -295,7 +295,7 @@ function Hero() {
     </div>
       <div className="hero-visual">
        <figure className="hero-campaign-banner" data-testid="hero-campaign-banner">
-          <img src={heroBannerImage} alt="ScanMyOwner QR contact tag: scan the code to contact the vehicle owner, with QR tag artwork." />
+          <img src={heroBannerImage} alt="ScanMyOwner “Your Vehicle Always Safe” banner featuring a vehicle and QR contact tag." />
        </figure>
      </div>
   </div></section>;
