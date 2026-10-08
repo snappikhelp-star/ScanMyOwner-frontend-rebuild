@@ -11,6 +11,32 @@ env = { "CI" = "true" }
 [workflows]
 runButton = "Project"
 
+[[workflows.windows]]
+name = "ScanMyOwner"
+path = "/"
+defaultMenu = ["monitor"]
+
+[[workflows.windows.panels]]
+name = "Server"
+type = "terminal"
+[[workflows.windows.panels.blocks]]
+type = "shell"
+[[workflows.windows.panels.blocks.blocks]]
+type = "service"
+id = "web"
+
+[[services]]
+name = "web"
+paths = ["/"]
+localPort = 23891
+
+[services.development]
+run = "pnpm --filter @workspace/scanmyowner run dev"
+
+[services.env]
+PORT = "23891"
+BASE_PATH = "/"
+
 [agent]
 stack = "PNPM_WORKSPACE"
 expertMode = true
