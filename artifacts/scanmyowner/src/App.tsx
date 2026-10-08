@@ -15,7 +15,7 @@ import NotFound from '@/pages/not-found';
 const queryClient = new QueryClient();
 const logo = '/brand/scanmyowner-logo.webp';
 const cardImage = '/brand/qr-contact-card.jpg';
-const heroBannerImage = '/brand/campaign-vehicle-safe.webp';
+const heroBannerImage = '/brand/legacy-qr-contact.jpg';
 const parkingCampaignImage = '/brand/campaign-no-parking.webp';
 const privacyCampaignImage = '/brand/campaign-private-vehicle.webp';
 const footerCampaignImage = '/brand/campaign-scan-owner.webp';
@@ -59,7 +59,7 @@ function Header() {
       </nav>
       <div className="nav-actions">
         <Link className="text-link" href="/login" data-testid="nav-login">Login</Link>
-        <Link className="btn btn-primary btn-small" href="/vehicle" data-testid="nav-get-tag">Get your tag <ArrowRight size={15} /></Link>
+        <Link className="btn btn-primary btn-small" href="/pricing" data-testid="nav-get-tag">Get your tag <ArrowRight size={15} /></Link>
       </div>
       <button className="menu-button" aria-label={open ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={open} onClick={() => setOpen(!open)} data-testid="button-mobile-menu">
         {open ? <X size={20} /> : <Menu size={20} />}
@@ -68,7 +68,7 @@ function Header() {
     <div className={`mobile-menu${open ? ' open' : ''}`}>
       {navItems.map((item) => <Link href={item.href} key={item.text} data-testid={`mobile-${item.text.toLowerCase().replaceAll(' ', '-')}`}>{item.text}</Link>)}
       <Link href="/login" data-testid="mobile-login">Login</Link>
-      <Link href="/vehicle" data-testid="mobile-get-tag">Get your tag <ArrowRight size={14} /></Link>
+      <Link href="/pricing" data-testid="mobile-get-tag">Get your tag <ArrowRight size={14} /></Link>
     </div>
   </header>;
 }
@@ -81,7 +81,7 @@ function Footer() {
           <span className="footer-campaign-label">A smarter way to stay connected</span>
           <h2>Your vehicle. Your privacy. One simple scan.</h2>
           <p>Give people a better way to reach you when it matters.</p>
-          <Link className="btn btn-orange" href="/vehicle" data-testid="footer-campaign-cta">Get your QR tag <ArrowRight size={15} /></Link>
+          <Link className="btn btn-orange" href="/pricing" data-testid="footer-campaign-cta">Get your QR tag <ArrowRight size={15} /></Link>
         </div>
         <img src={footerCampaignImage} alt="ScanMyOwner QR tag on a vehicle with ways to contact the owner" loading="lazy" />
       </div>
@@ -196,41 +196,6 @@ function PrivacySection() {
   </div></section>;
 }
 
-const vehicleTypes = ['CAR', 'BIKE', 'SCOOTER', 'SUV', 'VAN', 'OTHER'];
-const brands = ['Maruti Suzuki', 'Hyundai', 'Tata', 'Mahindra', 'Toyota', 'Kia', 'Honda', 'Volkswagen', 'Skoda', 'MG', 'Renault', 'Nissan', 'Jeep', 'BMW', 'Mercedes-Benz', 'Audi'];
-const colors = [
-  { name: 'White', hex: '#fdfdfb' }, { name: 'Black', hex: '#303634' }, { name: 'Silver', hex: '#b8c0bc' },
-  { name: 'Grey', hex: '#747d79' }, { name: 'Blue', hex: '#49769a' }, { name: 'Red', hex: '#bf5146' },
-  { name: 'Green', hex: '#4b7f58' }, { name: 'Yellow', hex: '#e4c64e' }, { name: 'Orange', hex: '#e58239' }, { name: 'Brown', hex: '#856b55' },
-];
-function VehicleConfigurator() {
-  const [type, setType] = useState('CAR');
-  const [brand, setBrand] = useState('Maruti Suzuki');
-  const [model, setModel] = useState('');
-  const [color, setColor] = useState(colors[0]);
-  const isCar = type === 'CAR' || type === 'SUV' || type === 'VAN';
-  const label = model.trim() || (type === 'CAR' ? 'Your vehicle' : `Your ${type.toLowerCase()}`);
-  return <section className="section vehicle-section" id="vehicle"><div className="container">
-    <div className="section-head"><Eyebrow>Make it yours</Eyebrow><h2>Make your tag feel like yours.</h2><p>Choose your vehicle and a color to see a simple preview. This is a frontend demo — no vehicle details are saved.</p></div>
-    <div className="vehicle-layout">
-      <div className="config-panel">
-        <strong style={{ fontSize: 13, color: '#304336' }}>Your vehicle</strong>
-        <div className="type-tabs" role="group" aria-label="Vehicle type">{vehicleTypes.map((v) => <button type="button" className={`type-tab${type === v ? ' active' : ''}`} onClick={() => setType(v)} key={v} aria-pressed={type === v} data-testid={`vehicle-type-${v.toLowerCase()}`}>{v}</button>)}</div>
-        <div className="fields">
-          {isCar && <div className="field"><label htmlFor="vehicle-brand">Brand</label><select id="vehicle-brand" value={brand} onChange={(e) => setBrand(e.target.value)} data-testid="select-vehicle-brand">{brands.map((b) => <option key={b}>{b}</option>)}</select></div>}
-          <div className="field"><label htmlFor="vehicle-model">Model</label><input id="vehicle-model" value={model} placeholder="e.g. Swift" onChange={(e) => setModel(e.target.value)} data-testid="input-vehicle-model" /></div>
-          <div className="field" style={{ gridColumn: '1 / -1', marginTop: 5 }}><label>Color</label><div className="color-row">{colors.map((c) => <button type="button" className={`color-choice${color.name === c.name ? ' active' : ''}`} key={c.name} style={{ background: c.hex }} title={c.name} aria-label={`Select ${c.name}`} aria-pressed={color.name === c.name} onClick={() => setColor(c)} data-testid={`vehicle-color-${c.name.toLowerCase()}`} />)}</div><div className="color-label" data-testid="text-selected-color">{color.name}</div></div>
-        </div>
-      </div>
-      <div className="vehicle-preview" style={{ ['--car-color' as string]: color.hex }} data-testid="vehicle-preview">
-        <div className="vehicle-tag"><img src={cardImage} alt="ScanMyOwner QR contact card" /></div>
-        <div className="preview-car"><span className="wheel left" /><span className="wheel right" /></div>
-        <div className="vehicle-preview-label" data-testid="text-vehicle-summary">{isCar ? `${brand} · ` : ''}{label} · {color.name}</div>
-      </div>
-    </div>
-  </div></section>;
-}
-
 const features = [
   { title: 'PRIVATE CONTACT', desc: "Your personal number doesn't need to be displayed publicly.", Icon: LockKeyhole, long: true },
   { title: 'QUICK CONTACT', desc: 'People can reach you without searching for your number.', Icon: Zap },
@@ -283,8 +248,8 @@ function PricingCards() {
     <div className="section-head"><Eyebrow>Simple, upfront pricing</Eyebrow><h2>Start simple.</h2><p>Choose the tag that feels right. Checkout is a preview only at this stage.</p></div>
     <div className="pricing-grid">{plans.map((plan) => <article className={`price-card${plan.smart ? ' popular' : ''}`} key={plan.name} data-testid={`pricing-card-${plan.name.toLowerCase()}`}>
       {plan.smart && <span className="popular-label">MOST POPULAR</span>}
-      <h3>{plan.name}</h3><div className="price" data-testid={`text-price-${plan.name.toLowerCase()}`}>{plan.price} <small>/ tag</small></div>
-      <p>A ScanMyOwner QR contact tag for your vehicle.</p><Link href="/vehicle" className={`btn ${plan.smart ? 'btn-primary' : 'btn-outline'}`} data-testid={`button-choose-${plan.name.toLowerCase()}`}>Choose {plan.name.toLowerCase()} <ArrowRight size={15} /></Link>
+       <h3>{plan.name}</h3><div className="price" data-testid={`text-price-${plan.name.toLowerCase()}`}>{plan.price} <small>/ tag</small></div>
+        <p>A ScanMyOwner QR contact tag for your vehicle.</p><Link href="/how-it-works" className={`btn ${plan.smart ? 'btn-primary' : 'btn-outline'}`} data-testid={`button-choose-${plan.name.toLowerCase()}`}>See how it works <ArrowRight size={15} /></Link>
     </article>)}</div>
     <p className="price-note">Demo pricing · No payment will be collected on this website.</p>
   </div></section>;
@@ -316,7 +281,7 @@ function FAQSection({ full = false }: { full?: boolean }) {
 
 function FinalCTA() {
   return <section className="cta"><div className="container cta-inner"><div><h2>Your vehicle.<br />Your privacy.<br />One simple scan.</h2><p>Give people a better way to reach you when it matters.</p></div>
-    <div className="cta-art"><img src={cardImage} alt="ScanMyOwner QR tag product card" /><Link className="btn btn-orange" href="/vehicle" data-testid="button-final-get-tag">Get your QR tag <ArrowRight size={15} /></Link></div>
+     <div className="cta-art"><img src={cardImage} alt="ScanMyOwner QR tag product card" /><Link className="btn btn-orange" href="/pricing" data-testid="button-final-get-tag">Get your QR tag <ArrowRight size={15} /></Link></div>
   </div></section>;
 }
 
@@ -324,13 +289,13 @@ function Hero() {
   return <section className="hero"><div className="container hero-grid">
     <div><Eyebrow>SMART QR CONTACT</Eyebrow><h1>Need to reach the owner?<br />Just <em>scan.</em></h1>
       <p className="hero-copy">One smart QR tag that lets people contact you when your vehicle needs your attention — without exposing your personal number.</p>
-      <div className="hero-actions"><Link className="btn btn-primary" href="/vehicle" data-testid="button-hero-get-tag">Get your QR tag <ArrowRight size={16} /></Link><Link className="btn btn-outline" href="/how-it-works" data-testid="button-hero-how">How it works</Link></div>
+      <div className="hero-actions"><Link className="btn btn-primary" href="/pricing" data-testid="button-hero-get-tag">Get your QR tag <ArrowRight size={16} /></Link><Link className="btn btn-outline" href="/how-it-works" data-testid="button-hero-how">How it works</Link></div>
       <div className="trust-points"><span><Check size={14} />Private contact</span><span><Check size={14} />No app needed</span><span><Check size={14} />Works with any phone</span></div>
       <SearchLookup />
     </div>
-     <div className="hero-visual">
+      <div className="hero-visual">
        <figure className="hero-campaign-banner" data-testid="hero-campaign-banner">
-         <img src={heroBannerImage} alt="ScanMyOwner banner showing a dark SUV with a QR tag and the message “Your Vehicle Always Safe.”" />
+          <img src={heroBannerImage} alt="ScanMyOwner QR contact tag: scan the code to contact the vehicle owner, with QR tag artwork." />
        </figure>
      </div>
   </div></section>;
@@ -338,7 +303,7 @@ function Hero() {
 
 function Home() {
   return <><Meta title="ScanMyOwner — Scan. Connect. Stay Private." description="A smart QR contact tag for your vehicle. Let people reach you when it matters, without exposing your personal number." />
-    <Shell><main><Hero /><TrustStrip /><ProblemSection /><EverydayScanPromo /><HowSteps /><PhoneDemo /><PrivacySection /><VehicleConfigurator /><FeaturesBento /><ProductExpansion /><PricingCards /><FAQSection /><FinalCTA /></main></Shell>
+     <Shell><main><Hero /><TrustStrip /><ProblemSection /><EverydayScanPromo /><HowSteps /><PhoneDemo /><PrivacySection /><FeaturesBento /><ProductExpansion /><PricingCards /><FAQSection /><FinalCTA /></main></Shell>
   </>;
 }
 
@@ -378,12 +343,14 @@ function LoginPage() {
     <div className="login-logo"><img src={logo} alt="ScanMyOwner" /></div><h2>Sign in</h2><p>Account access is a frontend preview only.</p><div className="demo-banner">Demo only — authentication is not enabled.</div>
     {submitted && <div className="form-success" role="status" data-testid="status-login-demo">Sign-in is not connected yet. Your details were not sent or saved.</div>}
      <form className="login-form" onSubmit={submit} data-testid="form-login"><label>Email address<input required type="email" autoComplete="username" placeholder="you@example.com" data-testid="input-login-email" /></label><label>Password<input required type="password" autoComplete="current-password" placeholder="Your password" data-testid="input-login-password" /></label><button className="btn btn-primary" type="submit" data-testid="button-login-submit">Continue <ArrowRight size={15} /></button></form>
-    <p style={{ marginTop: 18, marginBottom: 0 }}>New to ScanMyOwner? <Link className="route-link" href="/vehicle">Get your tag</Link></p>
+     <p style={{ marginTop: 18, marginBottom: 0 }}>New to ScanMyOwner? <Link className="route-link" href="/pricing">Get your tag</Link></p>
   </div></div></main></Shell></>;
 }
 
-function VehiclePage() {
-  return <><Meta title="Choose your vehicle | ScanMyOwner" description="Configure a sample vehicle and preview how it could appear with a ScanMyOwner QR tag. Demo only." /><Shell><main><PageHero eyebrow="Your vehicle, your tag" title="Start with your vehicle." text="Choose a vehicle type, brand and color to explore the ScanMyOwner experience. This preview does not save any information." /><VehicleConfigurator /><div className="container" style={{ textAlign: 'center', paddingBottom: 72 }}><div className="demo-banner" style={{ maxWidth: 580, margin: '0 auto 18px' }}>Checkout is a demo only — no payment or order will be placed.</div><Link href="/pricing" className="btn btn-outline" data-testid="link-vehicle-pricing">View tag pricing <ArrowRight size={15} /></Link></div></main></Shell></>;
+function VehicleRedirect() {
+  const [, setLocation] = useLocation();
+  useEffect(() => { setLocation('/pricing'); }, [setLocation]);
+  return null;
 }
 
 function TagPage() {
@@ -406,7 +373,7 @@ function Router() {
     <Route path="/faq" component={FAQPage} />
     <Route path="/contact" component={ContactPage} />
     <Route path="/login" component={LoginPage} />
-    <Route path="/vehicle" component={VehiclePage} />
+    <Route path="/vehicle" component={VehicleRedirect} />
     <Route path="/t/demo123" component={TagPage} />
     <Route component={NotFound} />
   </Switch></RoutedErrorBoundary>;
