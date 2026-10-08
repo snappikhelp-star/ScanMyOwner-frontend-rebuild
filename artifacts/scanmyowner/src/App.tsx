@@ -4,9 +4,9 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import {
-  ArrowDown, ArrowRight, Bike, CarFront, Check, CircleHelp,
+  ArrowRight, Bike, CarFront, Check, CircleHelp,
   Clock3, Heart, KeyRound, LockKeyhole, Menu, MessageCircle, Package,
-  Plus, Search, ShieldCheck, Smartphone, Sparkles, UserRound,
+  Plus, Search, ShieldCheck, Smartphone, Sparkles,
   X, Zap,
 } from 'lucide-react';
 import { Link, Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
@@ -15,7 +15,10 @@ import NotFound from '@/pages/not-found';
 const queryClient = new QueryClient();
 const logo = '/brand/scanmyowner-logo.webp';
 const cardImage = '/brand/qr-contact-card.jpg';
-const heroVehicleImage = '/brand/vehicle-lifestyle.jpg';
+const heroBannerImage = '/brand/campaign-vehicle-safe.webp';
+const parkingCampaignImage = '/brand/campaign-no-parking.webp';
+const privacyCampaignImage = '/brand/campaign-private-vehicle.webp';
+const footerCampaignImage = '/brand/campaign-scan-owner.webp';
 const navItems = [
   { text: 'How it works', href: '/how-it-works' },
   { text: 'Features', href: '/#features' },
@@ -73,6 +76,15 @@ function Header() {
 function Footer() {
   return <footer className="footer">
     <div className="container">
+      <div className="footer-campaign">
+        <div className="footer-campaign-copy">
+          <span className="footer-campaign-label">A smarter way to stay connected</span>
+          <h2>Your vehicle. Your privacy. One simple scan.</h2>
+          <p>Give people a better way to reach you when it matters.</p>
+          <Link className="btn btn-orange" href="/vehicle" data-testid="footer-campaign-cta">Get your QR tag <ArrowRight size={15} /></Link>
+        </div>
+        <img src={footerCampaignImage} alt="ScanMyOwner QR tag on a vehicle with ways to contact the owner" loading="lazy" />
+      </div>
       <div className="footer-main">
         <div><Brand footer /><p className="footer-desc">Scan. Connect. Stay Private.</p></div>
         <nav className="footer-links" aria-label="Footer navigation">
@@ -180,13 +192,7 @@ function PrivacySection() {
     <div><Eyebrow>Privacy, built in</Eyebrow><h2>Your number stays private.</h2><p>Your QR tag connects people to you without putting your personal number on display. A simpler way to be reachable, on your terms.</p>
       <div className="privacy-points"><span><LockKeyhole size={14} />Private contact</span><span><MessageCircle size={14} />Simple communication</span><span><ShieldCheck size={14} />Less personal information exposed</span></div>
     </div>
-    <div className="privacy-diagram" data-testid="diagram-private-contact">
-      <div className="privacy-shield"><ShieldCheck size={34} /><span>PRIVATE BY DESIGN</span><i /></div>
-      <div className="flow-node"><Smartphone size={18} /> SCANNER</div><div className="flow-arrow"><ArrowDown size={18} /></div>
-      <div className="flow-node brand-node"><img src={logo} alt="" /> SCANMYOWNER</div><div className="flow-arrow"><ArrowDown size={18} /></div>
-      <div className="flow-node"><UserRound size={18} /> OWNER</div>
-      <div className="flow-lock"><LockKeyhole size={15} /> Private contact</div>
-    </div>
+    <img className="privacy-campaign-image" src={privacyCampaignImage} alt="ScanMyOwner privacy campaign showing a connected vehicle and the message “Your Number Private. Your Vehicle Connected.”" loading="lazy" />
   </div></section>;
 }
 
@@ -243,37 +249,17 @@ function FeaturesBento() {
   </div></section>;
 }
 
-const campaignImages = [
-  {
-    src: '/brand/campaign-vehicle-safe.webp',
-    alt: 'ScanMyOwner campaign showing a tagged vehicle with the message “Your Vehicle Always Safe.”',
-    className: 'campaign-card-wide',
-  },
-  {
-    src: '/brand/campaign-private-vehicle.webp',
-    alt: 'A ScanMyOwner tag on a white SUV with the message “Your Number Private. Your Vehicle Connected.”',
-  },
-  {
-    src: '/brand/campaign-no-parking.webp',
-    alt: 'A vehicle tag beside the message “No Parking? Lights On? Just Scan.”',
-  },
-  {
-    src: '/brand/campaign-scan-owner.webp',
-    alt: 'A car windshield tag and QR code with ways to contact the vehicle owner.',
-  },
-];
-function CampaignGallery() {
-  return <section className="section campaign-section" id="campaigns">
+function EverydayScanPromo() {
+  return <section className="everyday-promo">
     <div className="container">
-      <div className="section-head">
-        <Eyebrow>ScanMyOwner in everyday life</Eyebrow>
-        <h2>Stay connected. Keep your number private.</h2>
-        <p>A simple scan helps people reach you when your vehicle needs attention.</p>
-      </div>
-      <div className="campaign-gallery">
-        {campaignImages.map(({ src, alt, className }) => <figure className={`campaign-card${className ? ` ${className}` : ''}`} key={src}>
-          <img src={src} alt={alt} loading="lazy" />
-        </figure>)}
+      <div className="everyday-promo-card">
+        <div className="everyday-promo-copy">
+          <Eyebrow>When something comes up</Eyebrow>
+          <h2>No parking? Lights on? One quick scan.</h2>
+          <p>Let someone reach you about your vehicle without putting your personal number on display.</p>
+          <Link className="btn btn-primary" href="/how-it-works">See how it works <ArrowRight size={15} /></Link>
+        </div>
+        <img src={parkingCampaignImage} alt="ScanMyOwner campaign showing a windshield QR tag beside the message “No Parking? Lights On? Just Scan.”" loading="lazy" />
       </div>
     </div>
   </section>;
@@ -342,24 +328,17 @@ function Hero() {
       <div className="trust-points"><span><Check size={14} />Private contact</span><span><Check size={14} />No app needed</span><span><Check size={14} />Works with any phone</span></div>
       <SearchLookup />
     </div>
-     <div className="hero-visual"><div className="hero-scene" data-testid="hero-product-scene">
-       <div className="hero-photo-frame"><img className="hero-vehicle-image" src={heroVehicleImage} alt="A modern white SUV with a ScanMyOwner contact tag on its windshield" data-testid="img-hero-vehicle" /><div className="hero-card-overlay"><img src={cardImage} alt="ScanMyOwner QR contact card" data-testid="img-qr-product-card" /></div><div className="hero-photo-caption"><i /> TAG SMO-247 · ACTIVE</div></div>
-       <div className="hero-phone" aria-label="ScanMyOwner phone preview">
-         <div className="hero-phone-notch" /><div className="hero-phone-status"><span>9:41</span><span>•••</span></div>
-         <div className="hero-phone-brand"><img src={logo} alt="" />ScanMyOwner</div>
-         <h2>How can we help?</h2><p>Choose a reason to reach the owner</p>
-         <div className="hero-phone-options">{reasons.slice(0, 4).map(({ label, Icon }, i) => <div className={`hero-phone-option hero-phone-option-${i + 1}`} key={label}><Icon size={14} /><span>{label}</span><ArrowRight size={12} /></div>)}</div>
-         <div className="hero-phone-private"><LockKeyhole size={11} />Your number stays private</div>
-       </div>
-       <div className="hero-alert hero-alert-request"><span className="hero-alert-icon"><MessageCircle size={16} /></span><span><strong>Owner contact request</strong><small>Someone needs your attention</small></span><i /></div>
-       <div className="hero-alert hero-alert-private"><LockKeyhole size={13} /><span>Private connection</span></div>
-     </div></div>
+     <div className="hero-visual">
+       <figure className="hero-campaign-banner" data-testid="hero-campaign-banner">
+         <img src={heroBannerImage} alt="ScanMyOwner banner showing a dark SUV with a QR tag and the message “Your Vehicle Always Safe.”" />
+       </figure>
+     </div>
   </div></section>;
 }
 
 function Home() {
   return <><Meta title="ScanMyOwner — Scan. Connect. Stay Private." description="A smart QR contact tag for your vehicle. Let people reach you when it matters, without exposing your personal number." />
-    <Shell><main><Hero /><TrustStrip /><ProblemSection /><HowSteps /><PhoneDemo /><PrivacySection /><VehicleConfigurator /><FeaturesBento /><CampaignGallery /><ProductExpansion /><PricingCards /><FAQSection /><FinalCTA /></main></Shell>
+    <Shell><main><Hero /><TrustStrip /><ProblemSection /><EverydayScanPromo /><HowSteps /><PhoneDemo /><PrivacySection /><VehicleConfigurator /><FeaturesBento /><ProductExpansion /><PricingCards /><FAQSection /><FinalCTA /></main></Shell>
   </>;
 }
 
