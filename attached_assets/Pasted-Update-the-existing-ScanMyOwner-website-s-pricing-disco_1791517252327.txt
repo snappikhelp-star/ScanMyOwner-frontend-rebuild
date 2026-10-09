@@ -1,0 +1,46 @@
+Update the existing ScanMyOwner website's pricing, discounts, coupon system, and Buy Now checkout flow. Inspect the current code first and make minimal targeted changes. Do not rebuild the website.
+
+**1. Pricing Packages (INR)**
+
+* Pack of 1 QR Card: ₹299
+* Pack of 2 QR Cards: ₹549
+* Pack of 3 QR Cards: ₹789
+
+**2. Show Attractive Discounts**
+Display the original price, discounted price, savings amount, and discount percentage on each package. Use these reference prices:
+
+* Pack of 1: ₹399 → ₹299 (Save ₹100, 25% off)
+* Pack of 2: ₹798 → ₹549 (Save ₹249, approximately 31% off)
+* Pack of 3: ₹1,197 → ₹789 (Save ₹408, approximately 34% off)
+
+Clearly highlight the best-value package without making false claims.
+
+**3. Coupon Code System**
+
+* Add a coupon input field and Apply Coupon button on the checkout page.
+* Support valid promotional coupon codes, configurable discount type (percentage or fixed amount), expiry date, minimum order value, usage limits, and enabled/disabled status.
+* Apply discounts only after server-side validation.
+* Display the package price, package discount, coupon discount, and final payable amount separately.
+* Prevent invalid, expired, or repeatedly redeemed coupons according to their usage rules.
+* Do not invent an active coupon code. Provide an admin-configurable system so I can create my own codes.
+
+**4. Single-Click Buy Now**
+
+* Every Buy Now / Buy Card button must open the correct checkout in one click.
+* Carry the selected package, quantity, and price into checkout.
+* Prevent duplicate orders and multiple payment sessions.
+* Make all buttons responsive and functional on mobile and desktop.
+
+**5. Secure Payment and QR Assignment**
+
+* Preserve the existing payment integration and Supabase database.
+* Verify payment on the server before confirming an order.
+* After verified payment, assign the correct number of unique, previously unassigned QR cards from inventory.
+* Keep assigned cards UNACTIVATED until the customer completes one-time registration.
+* Never reuse a QR card or expose private owner details.
+* Never simulate payment success or display fake order confirmations.
+
+**6. Testing**
+Test all three packages, coupon application/removal, incorrect and expired coupons, final price calculations, mobile checkout, duplicate clicks, payment failures, and QR inventory availability.
+
+Keep the existing design, brand identity, and working features. Avoid unnecessary dependencies and expensive rebuilds. Report which files were changed and any payment or Supabase configuration still required.
