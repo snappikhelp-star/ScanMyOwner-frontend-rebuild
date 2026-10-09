@@ -1,6 +1,6 @@
 ---
 name: Supabase key handling
-description: Keep privileged Supabase credentials out of browser bundles.
+description: Keep privileged Supabase credentials out of browser bundles and verify table grants separately.
 ---
 
 Use only the public anon/publishable key in ScanMyOwner's Vite/browser code. Never place a service-role or secret key in a `VITE_` variable.
@@ -8,3 +8,9 @@ Use only the public anon/publishable key in ScanMyOwner's Vite/browser code. Nev
 **Why:** Vite variables are bundled for visitors to the website; privileged Supabase keys can bypass intended access controls.
 
 **How to apply:** Keep browser initialization on the public key. Add any privileged operation later through a protected server-side path, with the least permissions needed.
+
+Supabase API-key acceptance and table privileges are separate checks. A successful REST schema-root request does not prove that the role can read individual tables; `42501` on a table request indicates a missing PostgreSQL object grant, even when the key is server-side.
+
+**Why:** Secret keys bypass row-level security, but Postgres table grants are still evaluated.
+
+**How to apply:** Probe each existing table with a zero-row read and distinguish gateway authentication from table permissions. Do not create tables or change grants without the user's authorization.
