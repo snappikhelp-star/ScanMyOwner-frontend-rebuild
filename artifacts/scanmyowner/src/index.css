@@ -674,6 +674,7 @@ h1,h2,h3,p { margin-top:0; }
 .contact-line {display:flex;gap:10px;align-items:center;padding:13px 0;border-top:1px solid #d3e7d5;color:#33553a;font-size:12px;font-weight:650;}
 .contact-form,.login-form {display:grid;gap:15px;}
 .contact-form label,.login-form label {display:grid;gap:6px;font-size:11px;font-weight:750;color:#526357;}
+.form-field-error {color:#b54732;font-size:11px;font-weight:600;}
 .contact-form textarea {min-height:120px;resize:vertical;}
 .form-success {padding:12px 14px;background:#e8f7ec;color:#246b29;border-radius:9px;font-size:12px;}
 .demo-banner {padding:10px 14px;background:#fff3c4;color:#72520c;border-radius:9px;font-size:11px;font-weight:650;margin-bottom:18px;}

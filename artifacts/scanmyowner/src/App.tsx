@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { Link, Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
 import NotFound from '@/pages/not-found';
+import QrCardPage from '@/pages/qr-card';
 
 const queryClient = new QueryClient();
 const logo = '/brand/scanmyowner-logo.webp';
@@ -375,6 +376,7 @@ function Router() {
     <Route path="/login" component={LoginPage} />
     <Route path="/vehicle" component={VehicleRedirect} />
     <Route path="/t/demo123" component={TagPage} />
+    <Route path="/t/:code">{(params) => <QrCardPage code={params.code} />}</Route>
     <Route component={NotFound} />
   </Switch></RoutedErrorBoundary>;
 }

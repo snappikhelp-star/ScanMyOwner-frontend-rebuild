@@ -5,21 +5,6 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
-
-export type QrStatusState = typeof QrStatusState[keyof typeof QrStatusState];
-
-
-export const QrStatusState = {
-  activation_required: 'activation_required',
-  active: 'active',
-} as const;
-
-export interface QrStatus {
-  state: QrStatusState;
-}
 
 export interface QrActivationInput {
   /**
@@ -55,19 +40,3 @@ export interface QrActivationInput {
      */
   vehicleRegistration: string;
 }
-
-export type QrActivationSuccessState = typeof QrActivationSuccessState[keyof typeof QrActivationSuccessState];
-
-
-export const QrActivationSuccessState = {
-  active: 'active',
-} as const;
-
-export interface QrActivationSuccess {
-  state: QrActivationSuccessState;
-}
-
-export interface ApiErrorResponse {
-  error: string;
-}
-
