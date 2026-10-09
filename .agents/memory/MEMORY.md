@@ -1,1 +1,2 @@
 - [Imported workspace setup](imported-workspace-setup.md) — imported metadata may exist before artifacts and managed workflows appear in the runtime registry.
+- [Supabase key handling](supabase-key-handling.md) — use public keys in browser code; keep privileged keys server-side.
