@@ -1,0 +1,39 @@
+You are working on my existing ScanMyOwner project. My goal is to make the QR tag activation system production-ready and launch the website successfully.
+
+**Project details**
+- Website: https://scanmyowner.com
+- Frontend: Cloudflare Pages
+- Backend: Render service `scanmyowner-api`
+- Database: Supabase
+- Existing database table: `qr_cards`
+- Existing columns: `id`, `code`, `status`, `created_at`
+- There are approximately 100 existing QR records, with 1 active and the remaining records unused.
+- The QR activation page opens and displays the activation form.
+- The activation form asks for a package claim code, owner name, mobile number, vehicle make, model, colour, and registration number.
+- The backend already contains QR status and activation routes in `artifacts/api-server/src/routes/qr.ts`.
+- The existing claim-code generator is `artifacts/api-server/scripts/generate-claim-codes.mjs`.
+- The generator uses `QR_ACTIVATION_HMAC_KEY` to derive private package claim codes.
+- The deployed backend uses Supabase and the `activate_qr_card` RPC.
+
+**Your task: audit, fix, and verify the existing system—not rebuild it.**
+
+1. Inspect the current repository, frontend activation flow, backend routes, activation-claim utility, database assumptions, scripts, tests, and deployment configuration before making changes.
+2. Identify why the QR page may remain on “Checking this QR tag…” and verify the actual frontend API base URL and backend endpoint paths.
+3. Verify that the frontend sends requests to the deployed Render API, not to the Cloudflare Pages domain by mistake.
+4. Inspect the claim-code generation and verification algorithms. Confirm their input normalization and encoding match exactly.
+5. Do not assume the local Replit `QR_ACTIVATION_HMAC_KEY` matches the Render secret. Never print, expose, copy into source code, or log any secret. Explain how to verify configuration safely.
+6. Inspect how the existing 100 QR records are represented. Do not create, delete, reset, or modify production QR records during the audit.
+7. Determine whether all unused records can be used with the current activation flow. If private claim codes are missing, propose a secure way to generate them using the same production secret without exposing that secret to the browser, repository, logs, or chat.
+8. Check whether QR image generation or printable PDF/ZIP generation already exists. If not, recommend the smallest low-cost implementation that creates QR images pointing to `https://scanmyowner.com/t/<existing-code>` for existing records only. Do not print actual customer claim codes in QR images.
+9. Preserve the existing database schema, security rules, owner-phone privacy, HMAC verification, and atomic activation through `activate_qr_card`. Do not add SMS OTP, expose phone numbers publicly, or weaken validation.
+10. Add or update automated tests for QR status lookup, valid and invalid claim codes, missing records, already-activated records, and API errors. Use mocks or test fixtures; never activate a real production card during testing.
+11. Run the available tests and build commands. Fix issues only when you can verify the fix.
+12. Review the Git diff and report exactly which files changed. Do not deploy, rotate secrets, modify production data, or perform destructive operations without asking me first.
+
+**Important constraints**
+- I am a beginner and need simple instructions.
+- Minimize Replit Agent credit usage.
+- Do not repeatedly ask me to run random Shell commands.
+- Do not claim the project is fixed unless tests or real safe checks confirm it.
+- If a task requires a dashboard action or secret that you cannot access, explain the exact manual step in simple language.
+- First return a short audit report with findings and a prioritized plan. Then implement only safe, necessary fixes and show the verification results.

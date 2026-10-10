@@ -69,6 +69,9 @@ globalThis.fetch = async (resource, init = {}) => {
   if (url.pathname === "/rest/v1/qr_cards" && method === "GET") {
     const filter = url.searchParams.get("code") ?? "";
     const code = filter.startsWith("eq.") ? filter.slice(3) : "";
+    if (code === "lookup-error-test-card") {
+      return jsonResponse({ error: "simulated lookup failure" }, 500);
+    }
     return jsonResponse((cardsByCode.get(code) ?? []).map((card) => ({ ...card })));
   }
 
@@ -198,6 +201,26 @@ test("activation commits through one RPC and keeps owner phone private", async (
   assert.equal(publicStatus.status, 200);
   assert.deepEqual(JSON.parse(publicStatus.text), { state: "active" });
   assert.equal(publicStatus.text.includes(phone), false);
+});
+
+test("a QR status lookup for a missing record returns not found", async () => {
+  const missing = await apiRequest("GET", "/api/qr/missing-test-card");
+  assert.equal(missing.status, 404);
+  assert.deepEqual(JSON.parse(missing.text), {
+    error: "This QR code is invalid or unavailable.",
+  });
+  assert.equal(missing.headers["cache-control"], "no-store");
+  assert.equal(missing.text.includes(phone), false);
+});
+
+test("a Supabase QR lookup error fails closed", async () => {
+  const failedLookup = await apiRequest("GET", "/api/qr/lookup-error-test-card");
+  assert.equal(failedLookup.status, 503);
+  assert.deepEqual(JSON.parse(failedLookup.text), {
+    error: "QR service is temporarily unavailable.",
+  });
+  assert.equal(failedLookup.headers["cache-control"], "no-store");
+  assert.equal(failedLookup.text.includes(phone), false);
 });
 
 test("retries and duplicate codes fail closed", async () => {
