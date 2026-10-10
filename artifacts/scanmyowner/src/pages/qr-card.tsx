@@ -60,7 +60,7 @@ function Unavailable({ retry }: { retry?: () => void }) {
   </>;
 }
 
-function ContactPage() {
+function ContactPage({ activationSuccess = false }: { activationSuccess?: boolean }) {
   const [selected, setSelected] = useState("");
   return <>
     <Meta title="ScanMyOwner | Private vehicle contact" description="Choose a reason to contact the vehicle owner without seeing their personal phone number." />
@@ -70,6 +70,9 @@ function ContactPage() {
         <div className="tag-car-icon"><CarFront size={28} /></div>
         <div><strong>Registered vehicle</strong><span>ScanMyOwner QR tag</span></div>
       </div>
+      {activationSuccess && <div className="form-success" role="status" data-testid="status-qr-activation-success">
+        Your QR tag is active. Your personal number will not be shown publicly.
+      </div>}
       <h1>How can we help?</h1>
       <p>Choose a reason to get in touch with the owner.</p>
       <div className="tag-reasons">
@@ -190,7 +193,7 @@ export default function QrCardPage({ code }: { code: string }) {
     },
   });
 
-  if (activated || status.data?.state === "active") return <ContactPage />;
+  if (activated || status.data?.state === "active") return <ContactPage activationSuccess={activated} />;
   if (status.isLoading) {
     return <><Meta title="Loading QR tag | ScanMyOwner" description="Checking this ScanMyOwner QR tag." /><TagShell><TagHeader /><p role="status" data-testid="status-qr-loading">Checking this QR tag…</p></TagShell></>;
   }
