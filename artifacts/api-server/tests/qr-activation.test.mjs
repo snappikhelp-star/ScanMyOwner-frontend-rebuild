@@ -256,6 +256,18 @@ test("missing or incorrect package claim codes never reach Supabase", async () =
   );
   assert.equal(missing.status, 400);
 
+  for (const claimCode of ["", "not-a-claim-code", null, 123, "0".repeat(32)]) {
+    const rejected = await apiRequest(
+      "POST",
+      "/api/qr/activation-test-card/activate",
+      { ...validDetails, claimCode },
+    );
+    assert.ok([400, 403].includes(rejected.status));
+    assert.equal(rejected.text.includes(validDetails.claimCode), false);
+    assert.equal(rpcCalls.length, beforeRpc);
+    assert.equal(nonRpcWrites.length, beforeNonRpcWrites);
+  }
+
   const incorrect = await apiRequest(
     "POST",
     "/api/qr/activation-test-card/activate",
@@ -269,19 +281,28 @@ test("missing or incorrect package claim codes never reach Supabase", async () =
   assert.equal(nonRpcWrites.length, beforeNonRpcWrites);
 });
 
-test("activation fails closed when the HMAC key is unavailable", async () => {
+test("activation fails closed when the HMAC key is unavailable or malformed", async () => {
   const previousKey = process.env.QR_ACTIVATION_HMAC_KEY;
   const beforeRpc = rpcCalls.length;
-  delete process.env.QR_ACTIVATION_HMAC_KEY;
+  const beforeNonRpcWrites = nonRpcWrites.length;
   try {
-    const response = await apiRequest(
-      "POST",
-      "/api/qr/activation-test-card/activate",
-      activationDetails("activation-test-card"),
-    );
-    assert.equal(response.status, 503);
-    assert.equal(response.text.includes(phone), false);
-    assert.equal(rpcCalls.length, beforeRpc);
+    for (const secret of [undefined, "", "a".repeat(63), "z".repeat(64)]) {
+      if (secret === undefined) {
+        delete process.env.QR_ACTIVATION_HMAC_KEY;
+      } else {
+        process.env.QR_ACTIVATION_HMAC_KEY = secret;
+      }
+      const response = await apiRequest(
+        "POST",
+        "/api/qr/activation-test-card/activate",
+        activationDetails("activation-test-card"),
+      );
+      assert.equal(response.status, 503);
+      assert.equal(response.text.includes(phone), false);
+      assert.equal(response.text.includes(activationDetails("activation-test-card").claimCode), false);
+      assert.equal(rpcCalls.length, beforeRpc);
+      assert.equal(nonRpcWrites.length, beforeNonRpcWrites);
+    }
   } finally {
     process.env.QR_ACTIVATION_HMAC_KEY = previousKey;
   }
