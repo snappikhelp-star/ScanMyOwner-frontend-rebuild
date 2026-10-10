@@ -96,6 +96,7 @@ function ActivationPage({ code, onActivated }: { code: string; onActivated: () =
   const form = useForm<QrActivationInput>({
     resolver: zodResolver(ActivateQrBody),
     defaultValues: {
+      claimCode: "",
       ownerName: "",
       ownerPhone: "",
       vehicleMake: "",
@@ -123,6 +124,8 @@ function ActivationPage({ code, onActivated }: { code: string; onActivated: () =
 
   const submitError = activation.error?.status === 409
     ? "This QR tag has already been activated or is no longer available."
+    : activation.error?.status === 403
+      ? "The package claim code is invalid. Check the code and try again."
     : activation.error?.status === 404
       ? "This QR code is invalid or unavailable."
       : activation.error
@@ -135,10 +138,14 @@ function ActivationPage({ code, onActivated }: { code: string; onActivated: () =
     <TagShell>
       <TagHeader />
       <h1>Activate your QR tag</h1>
-      <p>Enter the owner and vehicle details to connect this tag.</p>
+      <p>Enter the private code from inside the tag package and the owner and vehicle details.</p>
       {submitError && <div className="demo-banner" role="alert" data-testid="status-qr-activation-error">{submitError}</div>}
       <Form {...form}>
         <form className="contact-form" onSubmit={form.handleSubmit(submit)} noValidate data-testid="form-qr-activation">
+          <label>Package claim code
+            <input autoComplete="off" autoCapitalize="characters" spellCheck={false} maxLength={32} placeholder="32-character code" {...form.register("claimCode", { setValueAs: (value: string) => value.trim().toLowerCase() })} data-testid="input-qr-claim-code" />
+            {errors.claimCode && <span className="form-field-error">Enter the 32-character code printed inside the package.</span>}
+          </label>
           <label>Owner full name
             <input autoComplete="name" maxLength={100} {...form.register("ownerName", { setValueAs: (value: string) => value.trim().replace(/\s+/g, " ") })} data-testid="input-qr-owner-name" />
             {errors.ownerName && <span className="form-field-error">{errors.ownerName.message}</span>}

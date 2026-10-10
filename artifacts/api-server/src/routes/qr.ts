@@ -9,6 +9,10 @@ import {
   ActivateQrParams,
   GetQrStatusParams,
 } from "@workspace/api-zod";
+import {
+  getActivationClaimKey,
+  verifyActivationClaimCode,
+} from "../lib/activation-claim.mjs";
 
 type SupabaseTable = "qr_cards";
 type SupabaseConfig = { url: URL; key: string };
@@ -181,8 +185,12 @@ function normalizeActivationBody(body: unknown): unknown {
   const phone = typeof values.ownerPhone === "string"
     ? values.ownerPhone.trim().replace(/[()\s-]/g, "")
     : values.ownerPhone;
+  const claimCode = typeof values.claimCode === "string"
+    ? values.claimCode.trim().toLowerCase()
+    : values.claimCode;
   return {
     ...values,
+    claimCode,
     ownerName: trim(values.ownerName),
     ownerPhone: phone,
     vehicleMake: trim(values.vehicleMake),
@@ -253,6 +261,17 @@ router.post("/qr/:code/activate", async (req, res): Promise<void> => {
     return;
   }
 
+  const claimKey = getActivationClaimKey(process.env.QR_ACTIVATION_HMAC_KEY);
+  if (!claimKey) {
+    req.log.error("QR activation claim verification is not configured.");
+    unavailable(res);
+    return;
+  }
+  if (!verifyActivationClaimCode(code, activation.data.claimCode, claimKey)) {
+    res.status(403).json({ error: "The package claim code is invalid or unavailable." });
+    return;
+  }
+
   const config = supabaseConfig();
   if (!config) {
     unavailable(res);
@@ -260,7 +279,8 @@ router.post("/qr/:code/activate", async (req, res): Promise<void> => {
   }
 
   try {
-    const outcome = await activateWithTransaction(config, code, activation.data);
+    const { claimCode: _claimCode, ...details } = activation.data;
+    const outcome = await activateWithTransaction(config, code, details);
     if (outcome === "activated") {
       res.status(201).json({ state: "active" });
       return;

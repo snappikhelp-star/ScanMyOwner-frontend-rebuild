@@ -15,8 +15,11 @@ A vehicle QR contact tag demo with an API-backed card lookup and activation flow
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
 - `curl http://localhost:80/api/healthz` — API health check; expected response: `{"status":"ok"}`.
 - The marketing site can run without Supabase. QR lookup and activation require `SUPABASE_SERVICE_ROLE_KEY` in Replit Secrets and `VITE_SUPABASE_URL` for the API.
+- QR activation also requires the server-only `QR_ACTIVATION_HMAC_KEY` secret (exactly 64 hexadecimal characters representing 32 random bytes). The activation API fails closed if it is missing or malformed. Never put this key in a `VITE_` variable, logs, or generated package files.
+- Generate private package claim-code inserts from one QR code per input line with `pnpm --filter @workspace/api-server run generate:claim-codes < private-qr-codes.txt`. The generated CSV is written under ignored `generated-artifacts/`; keep it private, use it only to prepare matching sealed package inserts, and remove it after fulfillment.
+- Every shipped QR tag needs its matching private claim code inside its package. The activation form requires that code before the existing atomic RPC is called. No database schema change or external OTP/payment service is used.
 - Deploy the API update before applying `supabase/migrations/20261010000000_atomic_qr_activation.sql` to the existing Supabase database. Activation fails closed until the restricted transaction function is installed, avoiding the old multi-request write path during that gap.
-- Supabase requests use the service-role key only on the API server. Public QR responses expose only card state; activation stores owner and vehicle details in `registrations` and never returns the owner's phone number.
+- Supabase requests use the service-role key only on the API server. Public QR responses expose only card state; activation requires a matching private package claim code, stores owner and vehicle details in `registrations`, and never returns the owner's phone number or claim code.
 - If an imported workflow reports `vite: not found` or missing `esbuild`, restore dependencies with `pnpm install --frozen-lockfile`, then restart the managed workflows.
 - The unused database library requires `DATABASE_URL` if database-backed features are added later. No database was provisioned or migrated during import setup.
 

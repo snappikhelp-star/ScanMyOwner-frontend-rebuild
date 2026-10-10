@@ -48,6 +48,11 @@ export const ActivateQrParams = zod.object({
   "code": zod.coerce.string().min(1).max(activateQrPathCodeMax).regex(activateQrPathCodeRegExp)
 })
 
+export const activateQrBodyClaimCodeMin = 32;
+export const activateQrBodyClaimCodeMax = 32;
+
+
+export const activateQrBodyClaimCodeRegExp = new RegExp('^[A-Fa-f0-9]{32}$');
 export const activateQrBodyOwnerNameMin = 2;
 export const activateQrBodyOwnerNameMax = 100;
 
@@ -70,6 +75,7 @@ export const activateQrBodyVehicleRegistrationRegExp = new RegExp('^[A-Za-z0-9 -
 
 
 export const ActivateQrBody = zod.object({
+  "claimCode": zod.string().min(activateQrBodyClaimCodeMin).max(activateQrBodyClaimCodeMax).regex(activateQrBodyClaimCodeRegExp),
   "ownerName": zod.string().min(activateQrBodyOwnerNameMin).max(activateQrBodyOwnerNameMax),
   "ownerPhone": zod.string().min(activateQrBodyOwnerPhoneMin).max(activateQrBodyOwnerPhoneMax).regex(activateQrBodyOwnerPhoneRegExp),
   "vehicleMake": zod.string().min(1).max(activateQrBodyVehicleMakeMax),

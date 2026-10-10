@@ -104,6 +104,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: Package claim code is invalid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
         "404":
           description: Invalid, blocked, or unavailable QR card
           content:
@@ -141,6 +147,11 @@ components:
     QrActivationInput:
       type: object
       properties:
+        claimCode:
+          type: string
+          minLength: 32
+          maxLength: 32
+          pattern: "^[A-Fa-f0-9]{32}$"
         ownerName:
           type: string
           minLength: 2
@@ -168,6 +179,7 @@ components:
           maxLength: 20
           pattern: "^[A-Za-z0-9 -]{4,20}$"
       required:
+        - claimCode
         - ownerName
         - ownerPhone
         - vehicleMake

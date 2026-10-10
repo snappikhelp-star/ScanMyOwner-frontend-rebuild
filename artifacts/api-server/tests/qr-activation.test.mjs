@@ -2,13 +2,20 @@ import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
 import http from "node:http";
 import { readFile } from "node:fs/promises";
+import {
+  deriveActivationClaimCode,
+  getActivationClaimKey,
+} from "../src/lib/activation-claim.mjs";
 
 process.env.NODE_ENV = "test";
 process.env.LOG_LEVEL = "silent";
 process.env.VITE_SUPABASE_URL = "https://yskhbzievopsooadzgqo.supabase.co";
 process.env.SUPABASE_SERVICE_ROLE_KEY = "test-only-key-never-sent-to-network";
+process.env.QR_ACTIVATION_HMAC_KEY = "a".repeat(64);
 
 const phone = "+14155552671";
+const claimKey = getActivationClaimKey(process.env.QR_ACTIVATION_HMAC_KEY);
+assert.ok(claimKey);
 const cardsByCode = new Map([
   ["activation-test-card", [{ id: "test-card-1", code: "activation-test-card", status: "UNACTIVATED" }]],
   ["concurrent-test-card", [{ id: "test-card-2", code: "concurrent-test-card", status: "UNACTIVATED" }]],
@@ -67,7 +74,12 @@ globalThis.fetch = async (resource, init = {}) => {
 
   if (url.pathname === "/rest/v1/rpc/activate_qr_card" && method === "POST") {
     const args = JSON.parse(init.body ?? "{}");
-    rpcCalls.push({ code: args.p_code, method, path: url.pathname });
+    rpcCalls.push({
+      code: args.p_code,
+      method,
+      path: url.pathname,
+      claimCodeForwarded: Object.hasOwn(args, "claimCode"),
+    });
     const outcome = await withCodeLock(args.p_code, () => {
       const matches = cardsByCode.get(args.p_code) ?? [];
       if (matches.length === 0) return "not_found";
@@ -133,14 +145,15 @@ async function apiRequest(method, path, body) {
   });
 }
 
-const activationDetails = {
+const activationDetails = (code) => ({
+  claimCode: deriveActivationClaimCode(code, claimKey),
   ownerName: "Synthetic Test Owner",
   ownerPhone: phone,
   vehicleMake: "Example",
   vehicleModel: "Model",
   vehicleColour: "Blue",
   vehicleRegistration: "TEST 1234",
-};
+});
 
 before(async () => {
   ({ app } = await import("../dist/index.mjs"));
@@ -168,7 +181,7 @@ test("activation commits through one RPC and keeps owner phone private", async (
   const activated = await apiRequest(
     "POST",
     "/api/qr/activation-test-card/activate",
-    activationDetails,
+    activationDetails("activation-test-card"),
   );
   assert.equal(activated.status, 201);
   assert.deepEqual(JSON.parse(activated.text), { state: "active" });
@@ -178,6 +191,7 @@ test("activation commits through one RPC and keeps owner phone private", async (
   assert.deepEqual(rpcCalls.filter((call) => call.code === "activation-test-card").map((call) => call.path), [
     "/rest/v1/rpc/activate_qr_card",
   ]);
+  assert.equal(rpcCalls.find((call) => call.code === "activation-test-card")?.claimCodeForwarded, false);
   assert.equal(nonRpcWrites.length, 0);
 
   const publicStatus = await apiRequest("GET", "/api/qr/activation-test-card");
@@ -190,7 +204,7 @@ test("retries and duplicate codes fail closed", async () => {
   const retry = await apiRequest(
     "POST",
     "/api/qr/activation-test-card/activate",
-    activationDetails,
+    activationDetails("activation-test-card"),
   );
   assert.equal(retry.status, 409);
 
@@ -199,7 +213,7 @@ test("retries and duplicate codes fail closed", async () => {
   const duplicateActivation = await apiRequest(
     "POST",
     "/api/qr/duplicate-test-card/activate",
-    activationDetails,
+    activationDetails("duplicate-test-card"),
   );
   assert.equal(duplicateActivation.status, 409);
   assert.equal(registrations.has("test-card-4"), false);
@@ -208,8 +222,8 @@ test("retries and duplicate codes fail closed", async () => {
 
 test("simultaneous attempts can produce only one registration", async () => {
   const outcomes = await Promise.all([
-    apiRequest("POST", "/api/qr/concurrent-test-card/activate", activationDetails),
-    apiRequest("POST", "/api/qr/concurrent-test-card/activate", activationDetails),
+    apiRequest("POST", "/api/qr/concurrent-test-card/activate", activationDetails("concurrent-test-card")),
+    apiRequest("POST", "/api/qr/concurrent-test-card/activate", activationDetails("concurrent-test-card")),
   ]);
   assert.deepEqual(outcomes.map((outcome) => outcome.status).sort(), [201, 409]);
   assert.equal(registrations.has("test-card-2"), true);
@@ -221,12 +235,56 @@ test("an RPC failure does not expose private data or report success", async () =
   const response = await apiRequest(
     "POST",
     "/api/qr/rpc-failure-test-card/activate",
-    activationDetails,
+    activationDetails("rpc-failure-test-card"),
   );
   assert.equal(response.status, 503);
   assert.equal(response.text.includes(phone), false);
   assert.equal(cardsByCode.get("rpc-failure-test-card")[0].status, "UNACTIVATED");
   assert.equal(registrations.has("test-card-3"), false);
+});
+
+test("missing or incorrect package claim codes never reach Supabase", async () => {
+  const beforeRpc = rpcCalls.length;
+  const beforeNonRpcWrites = nonRpcWrites.length;
+  const validDetails = activationDetails("activation-test-card");
+  const missingClaimCode = { ...validDetails };
+  delete missingClaimCode.claimCode;
+  const missing = await apiRequest(
+    "POST",
+    "/api/qr/activation-test-card/activate",
+    missingClaimCode,
+  );
+  assert.equal(missing.status, 400);
+
+  const incorrect = await apiRequest(
+    "POST",
+    "/api/qr/activation-test-card/activate",
+    { ...validDetails, claimCode: activationDetails("concurrent-test-card").claimCode },
+  );
+  assert.equal(incorrect.status, 403);
+  assert.equal(missing.text.includes(phone), false);
+  assert.equal(incorrect.text.includes(phone), false);
+  assert.equal(incorrect.text.includes(validDetails.claimCode), false);
+  assert.equal(rpcCalls.length, beforeRpc);
+  assert.equal(nonRpcWrites.length, beforeNonRpcWrites);
+});
+
+test("activation fails closed when the HMAC key is unavailable", async () => {
+  const previousKey = process.env.QR_ACTIVATION_HMAC_KEY;
+  const beforeRpc = rpcCalls.length;
+  delete process.env.QR_ACTIVATION_HMAC_KEY;
+  try {
+    const response = await apiRequest(
+      "POST",
+      "/api/qr/activation-test-card/activate",
+      activationDetails("activation-test-card"),
+    );
+    assert.equal(response.status, 503);
+    assert.equal(response.text.includes(phone), false);
+    assert.equal(rpcCalls.length, beforeRpc);
+  } finally {
+    process.env.QR_ACTIVATION_HMAC_KEY = previousKey;
+  }
 });
 
 test("the SQL migration keeps both writes in one restricted function", async () => {

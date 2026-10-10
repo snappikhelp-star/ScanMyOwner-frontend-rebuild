@@ -23,6 +23,12 @@ export interface QrStatus {
 
 export interface QrActivationInput {
   /**
+     * @minLength 32
+     * @maxLength 32
+     * @pattern ^[A-Fa-f0-9]{32}$
+     */
+  claimCode: string;
+  /**
      * @minLength 2
      * @maxLength 100
      */
