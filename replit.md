@@ -14,6 +14,8 @@ A frontend demonstration of a vehicle QR contact tag that lets people preview co
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
 - `curl http://localhost:80/api/healthz` — API health check; expected response: `{"status":"ok"}`.
 - No additional secrets or external services are required to run the current demo.
+- The website does not initialize the unused browser Supabase client at startup. Database-backed QR lookup and activation require the API's Supabase configuration; they are not needed to load the marketing site.
+- If an imported workflow reports `vite: not found` or missing `esbuild`, restore dependencies with `pnpm install --frozen-lockfile`, then restart the managed workflows.
 - The unused database library requires `DATABASE_URL` if database-backed features are added later. No database was provisioned or migrated during import setup.
 
 ## Stack
