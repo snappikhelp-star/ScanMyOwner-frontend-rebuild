@@ -49,3 +49,6 @@ Thumbs.db
 .local/
 .env
 /generated-artifacts/
+
+# Private QR activation input
+/private-input/
