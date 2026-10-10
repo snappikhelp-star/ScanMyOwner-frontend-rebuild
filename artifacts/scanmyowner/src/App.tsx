@@ -68,6 +68,7 @@ function Header() {
     </div>
     <div className={`mobile-menu${open ? ' open' : ''}`}>
       {navItems.map((item) => <Link href={item.href} key={item.text} data-testid={`mobile-${item.text.toLowerCase().replaceAll(' ', '-')}`}>{item.text}</Link>)}
+      <Link className="btn btn-primary btn-small mobile-activate" href="/activate" data-testid="mobile-activate-qr">Activate Your QR <ArrowRight size={14} /></Link>
       <Link href="/login" data-testid="mobile-login">Login</Link>
       <Link href="/pricing" data-testid="mobile-get-tag">Get your tag <ArrowRight size={14} /></Link>
     </div>
@@ -290,7 +291,7 @@ function Hero() {
   return <section className="hero"><div className="container hero-grid">
     <div><Eyebrow>SMART QR CONTACT</Eyebrow><h1>Need to reach the owner?<br />Just <em>scan.</em></h1>
       <p className="hero-copy">One smart QR tag that lets people contact you when your vehicle needs your attention — without exposing your personal number.</p>
-      <div className="hero-actions"><Link className="btn btn-primary" href="/pricing" data-testid="button-hero-get-tag">Get your QR tag <ArrowRight size={16} /></Link><Link className="btn btn-outline" href="/how-it-works" data-testid="button-hero-how">How it works</Link></div>
+      <div className="hero-actions"><Link className="btn btn-primary" href="/pricing" data-testid="button-hero-get-tag">Get your QR tag <ArrowRight size={16} /></Link><Link className="btn btn-orange" href="/activate" data-testid="button-hero-activate">Activate Your QR <ArrowRight size={16} /></Link><Link className="btn btn-outline" href="/how-it-works" data-testid="button-hero-how">How it works</Link></div>
       <div className="trust-points"><span><Check size={14} />Private contact</span><span><Check size={14} />No app needed</span><span><Check size={14} />Works with any phone</span></div>
       <SearchLookup />
     </div>
@@ -348,6 +349,41 @@ function LoginPage() {
   </div></div></main></Shell></>;
 }
 
+function ActivationEntryPage() {
+  const [, setLocation] = useLocation();
+  const [tagCode, setTagCode] = useState('');
+  const [error, setError] = useState('');
+
+  function submit(e: FormEvent) {
+    e.preventDefault();
+    const code = tagCode.trim();
+    if (!/^[A-Za-z0-9._~-]{1,128}$/.test(code)) {
+      setError('Enter the QR tag code from the link on your tag.');
+      return;
+    }
+    setError('');
+    setLocation(`/t/${encodeURIComponent(code)}`);
+  }
+
+  return <><Meta title="Activate your QR | ScanMyOwner" description="Enter your ScanMyOwner QR tag code to continue activation." />
+    <Shell><main>
+      <PageHero eyebrow="Tag activation" title="Activate Your QR" text="Enter the QR tag code from your tag link. You’ll enter the private package activation code on the next step." />
+      <div className="page-body"><div className="login-shell">
+        <h2>Find your QR tag</h2>
+        <p>Enter the code after <strong>/t/</strong> in your tag link.</p>
+        <form className="contact-form" onSubmit={submit} noValidate data-testid="form-qr-entry">
+          <label htmlFor="qr-tag-code">QR tag code</label>
+          <input id="qr-tag-code" required autoComplete="off" autoCapitalize="none" maxLength={128} value={tagCode} onChange={(e) => { setTagCode(e.target.value); setError(''); }} aria-invalid={Boolean(error)} aria-describedby={error ? 'qr-tag-code-error' : 'qr-tag-code-help'} data-testid="input-qr-tag-code" />
+          <span id={error ? 'qr-tag-code-error' : 'qr-tag-code-help'} className={error ? 'form-field-error' : undefined} role={error ? 'alert' : undefined}>
+            {error || 'Use the letters and numbers shown in your QR tag link.'}
+          </span>
+          <button className="btn btn-primary" type="submit" data-testid="button-continue-qr-activation">Continue <ArrowRight size={15} /></button>
+        </form>
+      </div></div>
+    </main></Shell>
+  </>;
+}
+
 function VehicleRedirect() {
   const [, setLocation] = useLocation();
   useEffect(() => { setLocation('/pricing'); }, [setLocation]);
@@ -374,6 +410,7 @@ function Router() {
     <Route path="/faq" component={FAQPage} />
     <Route path="/contact" component={ContactPage} />
     <Route path="/login" component={LoginPage} />
+    <Route path="/activate" component={ActivationEntryPage} />
     <Route path="/vehicle" component={VehicleRedirect} />
     <Route path="/t/demo123" component={TagPage} />
     <Route path="/t/:code">{(params) => <QrCardPage code={params.code} />}</Route>

@@ -479,6 +479,7 @@ button { cursor:pointer; }
 .menu-button { display:none; border:1px solid #dce8de; color:#164a2b; background:white; width:43px; height:43px; border-radius:10px; align-items:center; justify-content:center; }
 .mobile-menu { display:none; padding:8px 24px 20px; border-top:1px solid #edf1ed; }
 .mobile-menu a { display:block; padding:12px 0; color:#42574a; font-weight:650; border-bottom:1px solid #eff3ef; }
+.mobile-menu .mobile-activate { display:flex; width:100%; justify-content:center; margin:12px 0; padding:9px 15px; border:0; color:white; }
 .hero { position:relative; isolation:isolate; padding:68px 0 60px; overflow:hidden; background:radial-gradient(ellipse at 84% 14%,#e4f6e7 0,transparent 36%),radial-gradient(ellipse at 56% 100%,#eff9ef 0,transparent 35%),#f3fbf5; }
 .hero:before,.hero:after { content:""; position:absolute; z-index:-1; border:1px solid #43a0470c; border-radius:50%; pointer-events:none; }
 .hero:before { width:640px;height:640px;right:-220px;top:-400px;box-shadow:0 0 0 38px #43a04707,0 0 0 86px #43a04705; }
