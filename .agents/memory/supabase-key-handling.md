@@ -14,3 +14,9 @@ Supabase API-key acceptance and table privileges are separate checks. A successf
 **Why:** Secret keys bypass row-level security, but Postgres table grants are still evaluated.
 
 **How to apply:** Probe each existing table with a zero-row read and distinguish gateway authentication from table permissions. Do not create tables or change grants without the user's authorization.
+
+A Supabase service-role key used through PostgREST is not a SQL migration connection and cannot install database functions or other DDL.
+
+**Why:** API access and schema-administration access are separate capabilities; treating a working REST key as migration access can leave code dependent on a function that was never installed.
+
+**How to apply:** Keep schema changes in reviewed SQL migrations and apply them through an authorized Supabase SQL/migration connection. If that connection is unavailable, report the migration as unapplied and make the API fail closed until it exists.

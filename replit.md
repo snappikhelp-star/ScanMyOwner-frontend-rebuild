@@ -11,9 +11,11 @@ A vehicle QR contact tag demo with an API-backed card lookup and activation flow
 - `pnpm install --frozen-lockfile` — install the existing workspace dependencies.
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
+- `pnpm --filter @workspace/api-server test` — API activation tests using a mocked Supabase service; no customer records are touched.
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
 - `curl http://localhost:80/api/healthz` — API health check; expected response: `{"status":"ok"}`.
 - The marketing site can run without Supabase. QR lookup and activation require `SUPABASE_SERVICE_ROLE_KEY` in Replit Secrets and `VITE_SUPABASE_URL` for the API.
+- Deploy the API update before applying `supabase/migrations/20261010000000_atomic_qr_activation.sql` to the existing Supabase database. Activation fails closed until the restricted transaction function is installed, avoiding the old multi-request write path during that gap.
 - Supabase requests use the service-role key only on the API server. Public QR responses expose only card state; activation stores owner and vehicle details in `registrations` and never returns the owner's phone number.
 - If an imported workflow reports `vite: not found` or missing `esbuild`, restore dependencies with `pnpm install --frozen-lockfile`, then restart the managed workflows.
 - The unused database library requires `DATABASE_URL` if database-backed features are added later. No database was provisioned or migrated during import setup.
@@ -31,7 +33,7 @@ A vehicle QR contact tag demo with an API-backed card lookup and activation flow
 ## Where things live
 
 - `artifacts/scanmyowner/` — website; pages in `src/App.tsx`, styles in `src/index.css`, brand images in `public/brand/`.
-- `artifacts/api-server/` — Express server; exposes `/api/healthz` and QR lookup/activation endpoints.
+- `artifacts/api-server/` — Express server; exposes `/api/healthz` and QR lookup/activation endpoints. Activation delegates both database writes to one transaction RPC.
 - `artifacts/mockup-sandbox/` — imported optional canvas component previews.
 - `lib/api-spec/`, `lib/api-client-react/`, `lib/api-zod/` — shared API contract and generated clients/validation.
 - `lib/db/` — unused database library.

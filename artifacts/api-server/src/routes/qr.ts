@@ -10,9 +10,22 @@ import {
   GetQrStatusParams,
 } from "@workspace/api-zod";
 
-type SupabaseTable = "qr_cards" | "registrations";
+type SupabaseTable = "qr_cards";
 type SupabaseConfig = { url: URL; key: string };
 type CardRecord = { id: string; code: string; status: string };
+type ActivationDetails = {
+  ownerName: string;
+  ownerPhone: string;
+  vehicleMake: string;
+  vehicleModel: string;
+  vehicleColour: string;
+  vehicleRegistration: string;
+};
+type ActivationOutcome =
+  | "activated"
+  | "not_found"
+  | "duplicate_code"
+  | "already_activated";
 
 const router: IRouter = Router();
 
@@ -63,22 +76,13 @@ async function requestSupabase(
   config: SupabaseConfig,
   table: SupabaseTable,
   query: URLSearchParams,
-  method = "GET",
-  body?: unknown,
-  prefer?: string,
 ): Promise<globalThis.Response> {
-  const headers: Record<string, string> = {
-    apikey: config.key,
-    authorization: `Bearer ${config.key}`,
-    accept: "application/json",
-  };
-  if (body !== undefined) headers["content-type"] = "application/json";
-  if (prefer) headers.prefer = prefer;
-
   return fetch(endpoint(config, table, query), {
-    method,
-    headers,
-    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    headers: {
+      apikey: config.key,
+      authorization: `Bearer ${config.key}`,
+      accept: "application/json",
+    },
   });
 }
 
@@ -128,49 +132,45 @@ async function findCard(
   return { kind: "card", card: rows[0] };
 }
 
-async function hasRegistration(
+async function activateWithTransaction(
   config: SupabaseConfig,
-  cardId: string,
-): Promise<number | null> {
-  const query = new URLSearchParams({
-    select: "id",
-    card_id: `eq.${cardId}`,
-    limit: "2",
+  code: string,
+  details: ActivationDetails,
+): Promise<ActivationOutcome | null> {
+  const url = new URL("/rest/v1/rpc/activate_qr_card", config.url);
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      apikey: config.key,
+      authorization: `Bearer ${config.key}`,
+      accept: "application/json",
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      p_code: code,
+      p_owner_name: details.ownerName,
+      p_owner_phone: details.ownerPhone,
+      p_vehicle_make: details.vehicleMake,
+      p_vehicle_model: details.vehicleModel,
+      p_vehicle_colour: details.vehicleColour,
+      p_vehicle_registration: details.vehicleRegistration,
+    }),
   });
-  const response = await requestSupabase(config, "registrations", query);
-  if (!response.ok) {
-    await response.body?.cancel();
-    return null;
-  }
-  const rows = await rowsFrom(response);
-  return rows ? rows.length : null;
-}
 
-async function updateCardStatus(
-  config: SupabaseConfig,
-  cardId: string,
-  from: string,
-  to: string,
-): Promise<boolean | null> {
-  const query = new URLSearchParams({
-    id: `eq.${cardId}`,
-    status: `eq.${from}`,
-    select: "id",
-  });
-  const response = await requestSupabase(
-    config,
-    "qr_cards",
-    query,
-    "PATCH",
-    { status: to },
-    "return=representation",
-  );
   if (!response.ok) {
     await response.body?.cancel();
     return null;
   }
-  const rows = await rowsFrom(response);
-  return rows ? rows.length === 1 : null;
+
+  try {
+    const outcome: unknown = await response.json();
+    return typeof outcome === "string" &&
+        ["activated", "not_found", "duplicate_code", "already_activated"].includes(outcome)
+      ? (outcome as ActivationOutcome)
+      : null;
+  } catch {
+    return null;
+  }
 }
 
 function normalizeActivationBody(body: unknown): unknown {
@@ -260,102 +260,24 @@ router.post("/qr/:code/activate", async (req, res): Promise<void> => {
   }
 
   try {
-    const result = await findCard(config, code);
-    if (result.kind === "error") {
-      req.log.warn("QR activation could not be completed.");
-      unavailable(res);
+    const outcome = await activateWithTransaction(config, code, activation.data);
+    if (outcome === "activated") {
+      res.status(201).json({ state: "active" });
       return;
     }
-    if (result.kind === "missing") {
+    if (outcome === "not_found") {
       res.status(404).json({ error: "This QR code is invalid or unavailable." });
       return;
     }
-    if (result.kind === "duplicate") {
+    if (outcome === "duplicate_code") {
       res.status(409).json({ error: "This QR code is invalid or unavailable." });
       return;
     }
-    if (result.card.status !== "UNACTIVATED") {
-      res.status(result.card.status === "ACTIVE" ? 409 : 404).json({
-        error: "This QR code is invalid or unavailable.",
-      });
-      return;
-    }
-
-    const priorRegistration = await hasRegistration(config, result.card.id);
-    if (priorRegistration === null) {
-      req.log.warn("Registration status could not be checked.");
-      unavailable(res);
-      return;
-    }
-    if (priorRegistration > 0) {
+    if (outcome === "already_activated") {
       res.status(409).json({ error: "This QR code is invalid or unavailable." });
       return;
     }
 
-    const claimed = await updateCardStatus(
-      config,
-      result.card.id,
-      "UNACTIVATED",
-      "ACTIVE",
-    );
-    if (claimed === null) {
-      req.log.warn("QR card could not be claimed for activation.");
-      unavailable(res);
-      return;
-    }
-    if (!claimed) {
-      res.status(409).json({ error: "This QR code is invalid or unavailable." });
-      return;
-    }
-
-    const details = activation.data;
-    const registration = {
-      card_id: result.card.id,
-      owner_name: details.ownerName,
-      owner_phone: details.ownerPhone,
-      vehicle_make: details.vehicleMake,
-      vehicle_model: details.vehicleModel,
-      vehicle_colour: details.vehicleColour,
-      vehicle_registration: details.vehicleRegistration,
-    };
-    const insertQuery = new URLSearchParams();
-    let insertResponse: globalThis.Response | null = null;
-    try {
-      insertResponse = await requestSupabase(
-        config,
-        "registrations",
-        insertQuery,
-        "POST",
-        registration,
-        "return=minimal",
-      );
-    } catch {
-      insertResponse = null;
-    }
-
-    if (insertResponse?.ok) {
-      res.status(201).json({ state: "active" });
-      return;
-    }
-
-    if (insertResponse) await insertResponse.body?.cancel();
-    const confirmedRegistration = await hasRegistration(config, result.card.id);
-    if (confirmedRegistration === 1) {
-      res.status(201).json({ state: "active" });
-      return;
-    }
-    if (confirmedRegistration === 0) {
-      const restored = await updateCardStatus(
-        config,
-        result.card.id,
-        "ACTIVE",
-        "UNACTIVATED",
-      );
-      if (restored === false) {
-        res.status(503).json({ error: "Activation could not be completed. Please try again." });
-        return;
-      }
-    }
     req.log.warn("QR activation outcome could not be confirmed.");
     unavailable(res);
   } catch {
