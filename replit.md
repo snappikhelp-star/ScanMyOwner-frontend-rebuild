@@ -1,6 +1,6 @@
 # ScanMyOwner
 
-A frontend demonstration of a vehicle QR contact tag that lets people preview contacting a vehicle owner privately.
+A vehicle QR contact tag demo with an API-backed card lookup and activation flow.
 
 ## Run & Operate
 
@@ -13,8 +13,8 @@ A frontend demonstration of a vehicle QR contact tag that lets people preview co
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
 - `curl http://localhost:80/api/healthz` — API health check; expected response: `{"status":"ok"}`.
-- No additional secrets or external services are required to run the current demo.
-- The website does not initialize the unused browser Supabase client at startup. Database-backed QR lookup and activation require the API's Supabase configuration; they are not needed to load the marketing site.
+- The marketing site can run without Supabase. QR lookup and activation require `SUPABASE_SERVICE_ROLE_KEY` in Replit Secrets and `VITE_SUPABASE_URL` for the API.
+- Supabase requests use the service-role key only on the API server. Public QR responses expose only card state; activation stores owner and vehicle details in `registrations` and never returns the owner's phone number.
 - If an imported workflow reports `vite: not found` or missing `esbuild`, restore dependencies with `pnpm install --frozen-lockfile`, then restart the managed workflows.
 - The unused database library requires `DATABASE_URL` if database-backed features are added later. No database was provisioned or migrated during import setup.
 
@@ -31,7 +31,7 @@ A frontend demonstration of a vehicle QR contact tag that lets people preview co
 ## Where things live
 
 - `artifacts/scanmyowner/` — website; pages in `src/App.tsx`, styles in `src/index.css`, brand images in `public/brand/`.
-- `artifacts/api-server/` — Express server; currently exposes only `/api/healthz`.
+- `artifacts/api-server/` — Express server; exposes `/api/healthz` and QR lookup/activation endpoints.
 - `artifacts/mockup-sandbox/` — imported optional canvas component previews.
 - `lib/api-spec/`, `lib/api-client-react/`, `lib/api-zod/` — shared API contract and generated clients/validation.
 - `lib/db/` — unused database library.
@@ -39,14 +39,14 @@ A frontend demonstration of a vehicle QR contact tag that lets people preview co
 
 ## Architecture decisions
 
-- Import setup preserves the existing structure, stack, and demo behavior. Running the demo does not require implementing live backend features.
+- Import setup preserves the existing structure and stack. Keep the Supabase service-role key server-side; do not add it to browser variables or responses.
 - The API and frontend use Replit's shared path-based proxy; no additional Vite proxy is needed.
 
 ## Product
 
 - Marketing homepage, pricing, how-it-works, FAQ, and contact pages.
 - Vehicle/tag customization and a sample tag page at `/t/demo123`.
-- Login, checkout, tag lookup, and owner-contact requests are explicitly frontend previews. They do not authenticate users, charge buyers, save vehicle details, or send messages.
+- Login and checkout remain frontend previews; they do not authenticate users or charge buyers. Owner-contact requests are also a preview and do not send messages.
 
 ## Gotchas
 

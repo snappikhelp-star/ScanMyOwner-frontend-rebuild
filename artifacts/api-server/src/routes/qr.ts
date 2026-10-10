@@ -266,8 +266,12 @@ router.post("/qr/:code/activate", async (req, res): Promise<void> => {
       unavailable(res);
       return;
     }
-    if (result.kind === "missing" || result.kind === "duplicate") {
+    if (result.kind === "missing") {
       res.status(404).json({ error: "This QR code is invalid or unavailable." });
+      return;
+    }
+    if (result.kind === "duplicate") {
+      res.status(409).json({ error: "This QR code is invalid or unavailable." });
       return;
     }
     if (result.card.status !== "UNACTIVATED") {
