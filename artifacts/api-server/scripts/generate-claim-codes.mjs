@@ -40,7 +40,7 @@ if (new Set(codes).size !== codes.length) {
 const outputDirectory = fileURLToPath(
   new URL("../../../generated-artifacts/activation-claim-codes/", import.meta.url),
 );
-const outputPath = resolve(outputDirectory, "activation-claim-codes.csv");
+const outputPath = resolve(outputDirectory, "activation-claim-codes-500.csv");
 await mkdir(outputDirectory, { recursive: true, mode: 0o700 });
 const output = await open(outputPath, "wx", 0o600);
 try {

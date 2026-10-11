@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-const claimCodePattern = /^[a-f0-9]{32}$/i;
+const claimCodePattern = /^[a-f0-9]{12}$/i;
 
 export function getActivationClaimKey(secret) {
   if (typeof secret !== "string" || !/^[a-f0-9]{64}$/i.test(secret)) {
@@ -14,7 +14,7 @@ export function deriveActivationClaimCode(qrCode, key) {
     .update("scanmyowner:qr-activation-claim:v1\0", "utf8")
     .update(qrCode, "utf8")
     .digest()
-    .subarray(0, 16)
+    .subarray(0, 6)
     .toString("hex");
 }
 

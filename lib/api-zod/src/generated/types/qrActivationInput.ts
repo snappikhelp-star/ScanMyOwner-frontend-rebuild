@@ -8,9 +8,9 @@
 
 export interface QrActivationInput {
   /**
-     * @minLength 32
-     * @maxLength 32
-     * @pattern ^[A-Fa-f0-9]{32}$
+     * @minLength 12
+     * @maxLength 12
+     * @pattern ^[a-fA-F0-9]{12}$
      */
   claimCode: string;
   /**

@@ -48,11 +48,11 @@ export const ActivateQrParams = zod.object({
   "code": zod.coerce.string().min(1).max(activateQrPathCodeMax).regex(activateQrPathCodeRegExp)
 })
 
-export const activateQrBodyClaimCodeMin = 32;
-export const activateQrBodyClaimCodeMax = 32;
+export const activateQrBodyClaimCodeMin = 12;
+export const activateQrBodyClaimCodeMax = 12;
 
 
-export const activateQrBodyClaimCodeRegExp = new RegExp('^[A-Fa-f0-9]{32}$');
+export const activateQrBodyClaimCodeRegExp = new RegExp('^[a-fA-F0-9]{12}$');
 export const activateQrBodyOwnerNameMin = 2;
 export const activateQrBodyOwnerNameMax = 100;
 

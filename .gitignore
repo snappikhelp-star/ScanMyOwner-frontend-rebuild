@@ -52,3 +52,9 @@ Thumbs.db
 
 # Private QR activation input
 /private-input/
+
+# Private QR activation input - never commit
+/artifacts/api-server/private-input/
+
+/generated-artifacts/activation-claim-codes/
+/generated-artifacts/qr-batches/
