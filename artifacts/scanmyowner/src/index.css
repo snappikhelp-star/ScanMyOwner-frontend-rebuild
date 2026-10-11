@@ -749,16 +749,20 @@ h1,h2,h3,p { margin-top:0; }
 .package-card { display:flex;flex-direction:column;min-height:100%;padding:30px; }
 .package-card-smart { border-color:#c9dccd;background:linear-gradient(150deg,#f6faf3,#edf5eb); }
 .package-card-draft { border-style:dashed;background:#fcfcf8; }
-.package-card-heading { min-height:143px; }
+.package-card-heading { min-height:178px; }
 .package-status { display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#edf4ec;color:#43664e;font-size:9px;font-weight:800;letter-spacing:.55px;text-transform:uppercase; }
 .package-card-smart .package-status { background:#dcebdd;color:#246346; }
 .package-card-draft .package-status { background:#fff0e4;color:#92501f; }
-.package-card-topline { display:flex;align-items:center;justify-content:space-between;gap:8px; }
+.package-card-topline { display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap; }
 .package-card-topline .package-status { white-space:nowrap; }
+.package-discount-badge { display:inline-flex;align-items:center;padding:6px 9px;border-radius:999px;background:#fff0df;color:#a55115;font-size:9px;font-weight:900;letter-spacing:.35px;white-space:nowrap; }
+.package-discount-badge-best { background:#e0f2e3;color:#1d6b3b; }
 .package-card h3 { margin:15px 0 9px;font-size:17px;letter-spacing:-.35px;text-transform:none;color:#193d2e; }
-.package-card .price { display:flex;flex-direction:column;gap:3px;font-size:36px;letter-spacing:-1.6px; }
+.package-card .price { display:flex;flex-direction:column;align-items:flex-start;gap:4px;font-size:36px;letter-spacing:-1.6px; }
 .package-card .price span { color:#21824d;font-weight:850; }
-.package-card .price .proposed-label { order:-1;color:#78877d;font-size:10px;letter-spacing:.03em;font-weight:650; }
+.package-card .price .offer-price-label { color:#78877d;font-size:10px;letter-spacing:.03em;font-weight:650; }
+.package-card .price .regular-price { color:#78877d;font-size:14px;line-height:1.25;letter-spacing:0;font-weight:600; }
+.package-card .price .package-savings { color:#446e50;font-size:11px;line-height:1.4;letter-spacing:0;font-weight:750; }
 .package-inclusions { display:grid;gap:13px;list-style:none;padding:20px 0 22px;margin:0 0 19px;border-top:1px solid #e8ece4;flex:1; }
 .package-inclusions li { display:flex;align-items:flex-start;gap:10px;color:#506458;font-size:12px;line-height:1.55; }
 .package-inclusions li svg { flex:none;margin-top:2px;color:#26764c; }

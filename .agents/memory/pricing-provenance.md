@@ -3,8 +3,8 @@ name: Pricing provenance
 description: How to verify ScanMyOwner package prices before making public discount claims.
 ---
 
-Do not treat prices shown in design mockups as approved original prices. Obtain an approved reference price for each package before presenting a percentage discount.
+The owner supplied these regular and offer prices for ScanMyOwner: Basic ₹999 → ₹299, Smart ₹1,899 → ₹549, Family ₹2,799 → ₹749. Calculate savings from these values; Family has the largest discount. Family contents remain draft and checkout is unavailable unless separately updated.
 
-**Why:** Older sandbox mockups contained demo price values, but did not establish approved public prices; percentage savings depend on valid reference prices.
+**Why:** The owner explicitly provided these regular and discount prices for use in the package cards; older mockup prices were only examples and are not a pricing source.
 
-**How to apply:** Before adding a discount claim, verify the original price and source for each package, and keep the claim out of the UI until verified.
+**How to apply:** Use the supplied values for the three listed packages, compute the displayed percentage and amount saved from the regular/offer pair, and preserve the separate draft and checkout limitations.

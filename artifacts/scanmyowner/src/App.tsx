@@ -258,7 +258,8 @@ function ProductExpansion() {
 type PackageCatalogEntry = {
   id: string;
   name: string;
-  proposedPrice: string;
+  regularPrice: number;
+  offerPrice: number;
   status: 'proposed' | 'draft';
   inclusions: string[];
 };
@@ -267,7 +268,8 @@ const packageCatalog: PackageCatalogEntry[] = [
   {
     id: 'basic',
     name: 'Basic',
-    proposedPrice: '₹299',
+    regularPrice: 999,
+    offerPrice: 299,
     status: 'proposed',
     inclusions: [
       'One ScanMyOwner QR tag',
@@ -279,7 +281,8 @@ const packageCatalog: PackageCatalogEntry[] = [
   {
     id: 'smart',
     name: 'Smart',
-    proposedPrice: '₹549',
+    regularPrice: 1899,
+    offerPrice: 549,
     status: 'proposed',
     inclusions: [
       'One ScanMyOwner QR tag',
@@ -291,23 +294,35 @@ const packageCatalog: PackageCatalogEntry[] = [
   {
     id: 'family',
     name: 'Family',
-    proposedPrice: '₹749',
+    regularPrice: 2799,
+    offerPrice: 749,
     status: 'draft',
     inclusions: [],
   },
 ];
 
+const formatPackagePrice = (amount: number) =>
+  new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
+
 function PricingCards({ detail = false }: { detail?: boolean }) {
   const plans = packageCatalog;
   return <section className="section pricing-section" id="pricing"><div className="container">
-    <div className="section-head"><Eyebrow>Proposed packages</Eyebrow><h2>{detail ? 'Choose a ScanMyOwner Pack' : 'Choose Your ScanMyOwner Pack'}</h2><p>{detail ? 'Basic and Smart currently share the same proposed inclusions. Family Pack details remain in draft.' : 'See all three proposed prices up front. Family Pack contents are still being confirmed.'}</p></div>
+    <div className="section-head"><Eyebrow>Pack discounts</Eyebrow><h2>{detail ? 'Choose a ScanMyOwner Pack' : 'Choose Your ScanMyOwner Pack'}</h2><p>{detail ? 'Compare the regular and offer prices. Family Pack has the highest savings; its contents remain in draft.' : 'Compare regular prices with offer prices. Family Pack has the highest savings, while its contents are still being confirmed.'}</p></div>
     <div className="pricing-grid">{plans.map((plan) => <article className={`price-card package-card package-card-${plan.id} package-card-${plan.status}`} key={plan.id} data-testid={`pricing-card-${plan.id}`}>
       <div className="package-card-heading">
         <div className="package-card-topline">
-          <span className="package-status">{plan.status === 'draft' ? 'Draft · contents to confirm' : 'Proposed package'}</span>
+          <span className="package-status">{plan.status === 'draft' ? 'Draft · contents to confirm' : 'Inclusions proposed'}</span>
+          <span className={`package-discount-badge${plan.id === 'family' ? ' package-discount-badge-best' : ''}`} data-testid={`discount-badge-${plan.id}`}>
+            {plan.id === 'family' ? 'Best savings · ' : ''}{Math.round(((plan.regularPrice - plan.offerPrice) / plan.regularPrice) * 100)}% OFF
+          </span>
         </div>
         <h3>{plan.name} Pack</h3>
-        <div className="price" data-testid={`text-price-${plan.id}`}><small className="proposed-label">Proposed price</small><span>{plan.proposedPrice}</span></div>
+        <div className="price" data-testid={`text-price-${plan.id}`}>
+          <small className="offer-price-label">Offer price</small>
+          <del className="regular-price">Regular {formatPackagePrice(plan.regularPrice)}</del>
+          <span>{formatPackagePrice(plan.offerPrice)}</span>
+          <small className="package-savings">You save {formatPackagePrice(plan.regularPrice - plan.offerPrice)}</small>
+        </div>
       </div>
       {plan.status === 'draft' ? <p className="package-draft-note">Package contents are being confirmed. No inclusions are listed yet.</p> : <ul className="package-inclusions" aria-label={`${plan.name} proposed inclusions`}>
         {plan.inclusions.map((inclusion, index) => <li key={inclusion} data-testid={`package-inclusion-${plan.id}-${index}`}><Check size={15} aria-hidden="true" /><span>{inclusion}</span></li>)}
@@ -322,7 +337,7 @@ function PricingCards({ detail = false }: { detail?: boolean }) {
         Buy Now
       </button>
     </article>)}</div>
-    <p className="price-note" data-testid="notice-proposed-pricing">Prices are proposals, not confirmed public offers. Basic and Smart inclusions are proposed; Family Pack contents remain in draft. Checkout is unavailable and no payment is collected on this website.</p>
+    <p className="price-note" data-testid="notice-proposed-pricing">Regular and offer prices are shown for comparison. Basic and Smart inclusions remain proposed; Family Pack contents are still in draft. Checkout is unavailable, and no payment is collected on this website.</p>
   </div></section>;
 }
 
@@ -422,7 +437,7 @@ function PageHero({ eyebrow, title, text }: { eyebrow: string; title: string; te
   return <div className="page-hero"><div className="container"><Eyebrow>{eyebrow}</Eyebrow><h1>{title}</h1><p>{text}</p></div></div>;
 }
 function PricingPage() {
-  return <><Meta title="ScanMyOwner packages | Product details" description="See proposed ScanMyOwner package prices, QR scan flow, owner activation and privacy information." /><Shell><main><PageHero eyebrow="ScanMyOwner tag details" title="One small tag. A private way to connect." text="See how the QR tag, visitor landing page and owner activation fit together. Package prices shown here are proposals, not confirmed public offers." /><PricingCards detail /><PricingProductDetails /><FinalCTA /></main></Shell></>;
+  return <><Meta title="ScanMyOwner packages | Product details" description="Compare ScanMyOwner regular and offer prices, QR scan flow, owner activation and privacy information." /><Shell><main><PageHero eyebrow="ScanMyOwner tag details" title="One small tag. A private way to connect." text="See how the QR tag, visitor landing page and owner activation fit together. Compare the regular and offer prices for each package." /><PricingCards detail /><PricingProductDetails /><FinalCTA /></main></Shell></>;
 }
 function HowPage() {
   return <><Meta title="How it works | ScanMyOwner" description="See how a ScanMyOwner smart QR tag helps someone reach a vehicle owner privately in three simple steps." /><Shell><main><PageHero eyebrow="A smarter way to connect" title="A scan can make all the difference." text="From a parked car to a quick solution, ScanMyOwner makes it easy to reach an owner without putting their personal number on display." /><HowSteps /><PhoneDemo /><PrivacySection /><FinalCTA /></main></Shell></>;
