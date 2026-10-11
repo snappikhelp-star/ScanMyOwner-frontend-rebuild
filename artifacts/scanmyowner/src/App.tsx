@@ -299,7 +299,16 @@ function PricingCards({ detail = false }: { detail?: boolean }) {
       <ul className="package-inclusions" aria-label={`${plan.name} inclusions`}>
         {plan.inclusions.map((inclusion, index) => <li key={inclusion} data-testid={`package-inclusion-${plan.id}-${index}`}><Check size={15} aria-hidden="true" /><span>{inclusion}</span></li>)}
       </ul>
-      <Link href="/how-it-works" className={`btn ${plan.id === 'smart' ? 'btn-primary' : 'btn-outline'}`} data-testid={`link-package-how-${plan.id}`}>See how it works <ArrowRight size={15} /></Link>
+      <button
+        className="btn btn-outline package-buy-disabled"
+        type="button"
+        disabled
+        aria-label={`Buy ${plan.name} — coming soon`}
+        data-testid={`button-buy-now-${plan.id}`}
+      >
+        <span>Buy Now</span>
+        <span className="package-buy-status">Coming Soon</span>
+      </button>
     </article>)}</div>
     <p className="price-note" data-testid="notice-proposed-pricing">Proposed prices only — these are not confirmed public offers. Checkout is unavailable and no payment is collected on this website.</p>
   </div></section>;
