@@ -623,7 +623,7 @@ h1,h2,h3,p { margin-top:0; }
 .category:hover {transform:translateY(-2px);background:#e8f7ec;}
 .category svg {color:#2e7d32;}
 .pricing-section {background:#fff8e8;}
-.pricing-grid {display:grid;grid-template-columns:1fr 1fr;gap:15px;max-width:720px;margin:0 auto;}
+.pricing-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;max-width:1040px;margin:0 auto;}
 .price-card {position:relative;border:1px solid #eee4ca;border-radius:18px;padding:25px 27px;background:#fff;box-shadow:0 13px 30px #5c48120b;}
 .price-card.popular {border:2px solid #2e7d32;background:#f3fbf5;box-shadow:0 18px 38px #164a2b14;}
 .popular-label {position:absolute;top:-12px;right:21px;background:#ff7a00;color:#17221a;padding:6px 11px;border-radius:20px;font-size:8px;font-weight:900;letter-spacing:.8px;}
@@ -745,12 +745,14 @@ h1,h2,h3,p { margin-top:0; }
 }
 
 /* Package clarity: proposed pricing, shared inclusions, and no implied checkout. */
-.pricing-grid { align-items:stretch;gap:18px;max-width:790px; }
+.pricing-grid { align-items:stretch;gap:18px;max-width:1040px; }
 .package-card { display:flex;flex-direction:column;min-height:100%;padding:30px; }
 .package-card-smart { border-color:#c9dccd;background:linear-gradient(150deg,#f6faf3,#edf5eb); }
+.package-card-draft { border-style:dashed;background:#fcfcf8; }
 .package-card-heading { min-height:143px; }
 .package-status { display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#edf4ec;color:#43664e;font-size:9px;font-weight:800;letter-spacing:.55px;text-transform:uppercase; }
 .package-card-smart .package-status { background:#dcebdd;color:#246346; }
+.package-card-draft .package-status { background:#fff0e4;color:#92501f; }
 .package-card-topline { display:flex;align-items:center;justify-content:space-between;gap:8px; }
 .package-card-topline .package-status { white-space:nowrap; }
 .package-card h3 { margin:15px 0 9px;font-size:17px;letter-spacing:-.35px;text-transform:none;color:#193d2e; }
@@ -759,10 +761,9 @@ h1,h2,h3,p { margin-top:0; }
 .package-inclusions { display:grid;gap:13px;list-style:none;padding:20px 0 22px;margin:0 0 19px;border-top:1px solid #e8ece4;flex:1; }
 .package-inclusions li { display:flex;align-items:flex-start;gap:10px;color:#506458;font-size:12px;line-height:1.55; }
 .package-inclusions li svg { flex:none;margin-top:2px;color:#26764c; }
-.package-card .btn { margin-top:auto; }
-.package-card .package-buy-disabled { width:auto;min-height:36px;margin-top:0;padding:7px 9px;gap:7px;color:#59685e;border-color:#d8e1d7;background:#eef3ed;box-shadow:none;cursor:not-allowed;font-size:11px; }
-.package-card .package-buy-disabled:hover { transform:none;background:#eef3ed;box-shadow:none; }
-.package-buy-status { padding:5px 8px;border-radius:999px;background:#dce8db;color:#4c6951;font-size:9px;font-weight:800;letter-spacing:.2px; }
+.package-draft-note { flex:1;margin:0 0 19px;padding:20px 0 22px;border-top:1px solid #e8ece4;color:#65766a;font-size:12px;line-height:1.65; }
+.package-card .package-buy-disabled { width:100%;min-height:46px;margin-top:auto;padding:11px 16px;color:#fff;border-color:#216c47;background:#216c47;box-shadow:0 8px 18px #164a2b1a;cursor:not-allowed;font-size:12px;font-weight:800;opacity:1; }
+.package-card .package-buy-disabled:hover { transform:none;background:#216c47;box-shadow:0 8px 18px #164a2b1a; }
 .price-note { max-width:690px;margin:22px auto 0;color:#65766a;font-size:11px;line-height:1.7; }
 .pricing-detail-section { background:#fbfcf8; }
 .pricing-detail-intro { display:grid;grid-template-columns:minmax(0,1fr) 220px;align-items:center;gap:52px;max-width:920px;margin:0 auto 36px; }
@@ -779,6 +780,10 @@ h1,h2,h3,p { margin-top:0; }
 .pricing-flow-note { max-width:800px;margin:20px auto 0;padding:13px 16px;border:1px solid #eadfbe;border-radius:12px;background:#fff8e8;color:#6d5a31;font-size:11px;line-height:1.65; }
 .pricing-questions { display:flex;justify-content:center;align-items:center;gap:8px 15px;flex-wrap:wrap;margin-top:26px;color:#64766d;font-size:12px; }
 .pricing-questions .route-link { display:inline-flex;align-items:center;gap:5px;font-weight:750; }
+@media(min-width:701px) and (max-width:900px) {
+  .pricing-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .package-card-draft { grid-column:1 / -1;max-width:520px;width:100%;justify-self:center; }
+}
 @media(max-width:700px) {
   .pricing-grid { grid-template-columns:1fr;gap:14px;max-width:470px; }
   .package-card { min-height:0;padding:24px; }

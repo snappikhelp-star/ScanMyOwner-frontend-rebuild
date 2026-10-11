@@ -262,7 +262,7 @@ const packageCatalog: PackageCatalogEntry[] = [
       'One ScanMyOwner QR tag',
       'QR scan landing page',
       'Owner activation flow',
-      'Visitor contact actions supported by the existing QR flow',
+      'Visitor contact-reason options on the scan page',
     ],
   },
   {
@@ -274,45 +274,44 @@ const packageCatalog: PackageCatalogEntry[] = [
       'One ScanMyOwner QR tag',
       'QR scan landing page',
       'Owner activation flow',
-      'Visitor contact actions supported by the existing QR flow',
+      'Visitor contact-reason options on the scan page',
     ],
   },
   {
     id: 'family',
     name: 'Family',
-    proposedPrice: '₹789',
+    proposedPrice: '₹749',
     status: 'draft',
     inclusions: [],
   },
 ];
 
 function PricingCards({ detail = false }: { detail?: boolean }) {
-  const plans = packageCatalog.filter((plan) => plan.status === 'proposed');
+  const plans = packageCatalog;
   return <section className="section pricing-section" id="pricing"><div className="container">
-    <div className="section-head"><Eyebrow>{detail ? 'Proposed packages' : 'Package preview'}</Eyebrow><h2>{detail ? 'One tag. A clearer way to connect.' : 'Start with the essentials.'}</h2><p>{detail ? 'The proposed Basic and Smart packages currently list the same inclusions. Prices are for design preview only.' : 'See what is currently defined for each package. Checkout is not available.'}</p></div>
-    <div className="pricing-grid">{plans.map((plan) => <article className={`price-card package-card package-card-${plan.id}`} key={plan.id} data-testid={`pricing-card-${plan.id}`}>
+    <div className="section-head"><Eyebrow>Proposed packages</Eyebrow><h2>{detail ? 'Choose a ScanMyOwner Pack' : 'Choose Your ScanMyOwner Pack'}</h2><p>{detail ? 'Basic and Smart currently share the same proposed inclusions. Family Pack details remain in draft.' : 'See all three proposed prices up front. Family Pack contents are still being confirmed.'}</p></div>
+    <div className="pricing-grid">{plans.map((plan) => <article className={`price-card package-card package-card-${plan.id} package-card-${plan.status}`} key={plan.id} data-testid={`pricing-card-${plan.id}`}>
       <div className="package-card-heading">
         <div className="package-card-topline">
-          <span className="package-status">Proposed package</span>
-          <button
-            className="btn btn-outline package-buy-disabled"
-            type="button"
-            disabled
-            aria-label={`Buy ${plan.name} — coming soon`}
-            data-testid={`button-buy-now-${plan.id}`}
-          >
-            <span>Buy Now</span>
-            <span className="package-buy-status">Coming Soon</span>
-          </button>
+          <span className="package-status">{plan.status === 'draft' ? 'Draft · contents to confirm' : 'Proposed package'}</span>
         </div>
-        <h3>{plan.name}</h3>
+        <h3>{plan.name} Pack</h3>
         <div className="price" data-testid={`text-price-${plan.id}`}><small className="proposed-label">Proposed price</small><span>{plan.proposedPrice}</span></div>
       </div>
-      <ul className="package-inclusions" aria-label={`${plan.name} inclusions`}>
+      {plan.status === 'draft' ? <p className="package-draft-note">Package contents are being confirmed. No inclusions are listed yet.</p> : <ul className="package-inclusions" aria-label={`${plan.name} proposed inclusions`}>
         {plan.inclusions.map((inclusion, index) => <li key={inclusion} data-testid={`package-inclusion-${plan.id}-${index}`}><Check size={15} aria-hidden="true" /><span>{inclusion}</span></li>)}
-      </ul>
+      </ul>}
+      <button
+        className="btn btn-primary package-buy-disabled"
+        type="button"
+        disabled
+        aria-label={`${plan.name} Pack — coming soon`}
+        data-testid={`button-coming-soon-${plan.id}`}
+      >
+        Coming Soon
+      </button>
     </article>)}</div>
-    <p className="price-note" data-testid="notice-proposed-pricing">Proposed prices only — these are not confirmed public offers. Checkout is unavailable and no payment is collected on this website.</p>
+    <p className="price-note" data-testid="notice-proposed-pricing">Prices are proposals, not confirmed public offers. Basic and Smart inclusions are proposed; Family Pack contents remain in draft. Checkout is unavailable and no payment is collected on this website.</p>
   </div></section>;
 }
 
@@ -404,7 +403,7 @@ function Hero() {
 
 function Home() {
   return <><Meta title="ScanMyOwner — Scan. Connect. Stay Private." description="A smart QR contact tag for your vehicle. Let people reach you when it matters, without exposing your personal number." />
-     <Shell><main><Hero /><TrustStrip /><ProblemSection /><EverydayScanPromo /><HowSteps /><PhoneDemo /><PrivacySection /><FeaturesBento /><ProductExpansion /><PricingCards /><FAQSection /><FinalCTA /></main></Shell>
+     <Shell><main><Hero /><PricingCards /><TrustStrip /><ProblemSection /><EverydayScanPromo /><HowSteps /><PhoneDemo /><PrivacySection /><FeaturesBento /><ProductExpansion /><FAQSection /><FinalCTA /></main></Shell>
   </>;
 }
 
@@ -412,7 +411,7 @@ function PageHero({ eyebrow, title, text }: { eyebrow: string; title: string; te
   return <div className="page-hero"><div className="container"><Eyebrow>{eyebrow}</Eyebrow><h1>{title}</h1><p>{text}</p></div></div>;
 }
 function PricingPage() {
-  return <><Meta title="ScanMyOwner packages | Product details" description="See the proposed ScanMyOwner Basic and Smart package details, QR scan flow, owner activation and privacy information." /><Shell><main><PageHero eyebrow="ScanMyOwner tag details" title="One small tag. A private way to connect." text="See how the QR tag, visitor landing page and owner activation fit together. Package prices shown here are proposals, not confirmed public offers." /><PricingCards detail /><PricingProductDetails /><FinalCTA /></main></Shell></>;
+  return <><Meta title="ScanMyOwner packages | Product details" description="See proposed ScanMyOwner package prices, QR scan flow, owner activation and privacy information." /><Shell><main><PageHero eyebrow="ScanMyOwner tag details" title="One small tag. A private way to connect." text="See how the QR tag, visitor landing page and owner activation fit together. Package prices shown here are proposals, not confirmed public offers." /><PricingCards detail /><PricingProductDetails /><FinalCTA /></main></Shell></>;
 }
 function HowPage() {
   return <><Meta title="How it works | ScanMyOwner" description="See how a ScanMyOwner smart QR tag helps someone reach a vehicle owner privately in three simple steps." /><Shell><main><PageHero eyebrow="A smarter way to connect" title="A scan can make all the difference." text="From a parked car to a quick solution, ScanMyOwner makes it easy to reach an owner without putting their personal number on display." /><HowSteps /><PhoneDemo /><PrivacySection /><FinalCTA /></main></Shell></>;

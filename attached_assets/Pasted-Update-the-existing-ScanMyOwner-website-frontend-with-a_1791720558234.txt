@@ -1,0 +1,35 @@
+Update the existing ScanMyOwner website frontend with a purchase-focused layout. Make targeted changes only; preserve the working QR activation flow and backend.
+
+### 1. Move the buying section to the top
+- Put a prominent “Choose Your ScanMyOwner Pack” section near the top of the homepage, immediately after the hero section.
+- Customers should see the package cards without having to visit “How It Works”.
+- Keep “How It Works” as a secondary informational section further down the page.
+- Make the cards responsive, polished, and mobile-friendly.
+
+### 2. Display these three proposed package prices
+- Basic Pack — ₹299
+- Smart Pack — ₹549
+- Family Pack — ₹749
+
+Use the existing package descriptions where verified. Do not invent tag quantities, inclusions, delivery promises, or features. If any package contents are unconfirmed, keep the package marked as a draft in code and do not represent those contents as verified.
+
+### 3. Buttons
+- Show a prominent “Coming Soon” button on each proposed package.
+- Buttons must not pretend to complete an order or payment.
+- Do not connect them to the How It Works page.
+- Keep checkout disabled until a real order/payment flow is implemented.
+
+### 4. Discount promotion
+- Add an 80% OFF promotional banner only if the original prices can be verified and the discount is genuine.
+- First inspect the repository for approved original prices. Do not invent crossed-out prices or falsely claim that every order receives 80% OFF.
+- If original prices are not verified, leave the discount banner out and report what information is needed to enable it.
+
+### 5. Preserve existing functionality
+Do not change:
+- QR activation, /activate, or /t/:code.
+- QR status lookup, claim-code validation, or owner privacy.
+- Backend API, Supabase, credentials, secrets, or payment logic.
+- Existing deployment settings.
+
+### 6. Final checks
+Run the existing frontend build once. Verify the homepage, /pricing, and activation page. Report changed files, build result, and whether the discount was safely enabled. Do not deploy automatically.
