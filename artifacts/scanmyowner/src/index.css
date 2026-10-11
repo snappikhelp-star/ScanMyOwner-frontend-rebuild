@@ -751,6 +751,8 @@ h1,h2,h3,p { margin-top:0; }
 .package-card-heading { min-height:143px; }
 .package-status { display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#edf4ec;color:#43664e;font-size:9px;font-weight:800;letter-spacing:.55px;text-transform:uppercase; }
 .package-card-smart .package-status { background:#dcebdd;color:#246346; }
+.package-card-topline { display:flex;align-items:center;justify-content:space-between;gap:8px; }
+.package-card-topline .package-status { white-space:nowrap; }
 .package-card h3 { margin:15px 0 9px;font-size:17px;letter-spacing:-.35px;text-transform:none;color:#193d2e; }
 .package-card .price { display:flex;flex-direction:column;gap:3px;font-size:36px;letter-spacing:-1.6px; }
 .package-card .price .proposed-label { order:-1;color:#78877d;font-size:10px;letter-spacing:.03em;font-weight:650; }
@@ -758,9 +760,9 @@ h1,h2,h3,p { margin-top:0; }
 .package-inclusions li { display:flex;align-items:flex-start;gap:10px;color:#506458;font-size:12px;line-height:1.55; }
 .package-inclusions li svg { flex:none;margin-top:2px;color:#26764c; }
 .package-card .btn { margin-top:auto; }
-.package-card .package-buy-disabled { width:100%;justify-content:space-between;color:#59685e;border-color:#d8e1d7;background:#eef3ed;box-shadow:none;cursor:not-allowed; }
+.package-card .package-buy-disabled { width:auto;min-height:36px;margin-top:0;padding:7px 9px;gap:7px;color:#59685e;border-color:#d8e1d7;background:#eef3ed;box-shadow:none;cursor:not-allowed;font-size:11px; }
 .package-card .package-buy-disabled:hover { transform:none;background:#eef3ed;box-shadow:none; }
-.package-buy-status { padding:5px 8px;border-radius:999px;background:#dce8db;color:#4c6951;font-size:10px;font-weight:800;letter-spacing:.2px; }
+.package-buy-status { padding:5px 8px;border-radius:999px;background:#dce8db;color:#4c6951;font-size:9px;font-weight:800;letter-spacing:.2px; }
 .price-note { max-width:690px;margin:22px auto 0;color:#65766a;font-size:11px;line-height:1.7; }
 .pricing-detail-section { background:#fbfcf8; }
 .pricing-detail-intro { display:grid;grid-template-columns:minmax(0,1fr) 220px;align-items:center;gap:52px;max-width:920px;margin:0 auto 36px; }

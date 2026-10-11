@@ -292,23 +292,25 @@ function PricingCards({ detail = false }: { detail?: boolean }) {
     <div className="section-head"><Eyebrow>{detail ? 'Proposed packages' : 'Package preview'}</Eyebrow><h2>{detail ? 'One tag. A clearer way to connect.' : 'Start with the essentials.'}</h2><p>{detail ? 'The proposed Basic and Smart packages currently list the same inclusions. Prices are for design preview only.' : 'See what is currently defined for each package. Checkout is not available.'}</p></div>
     <div className="pricing-grid">{plans.map((plan) => <article className={`price-card package-card package-card-${plan.id}`} key={plan.id} data-testid={`pricing-card-${plan.id}`}>
       <div className="package-card-heading">
-        <span className="package-status">Proposed package</span>
+        <div className="package-card-topline">
+          <span className="package-status">Proposed package</span>
+          <button
+            className="btn btn-outline package-buy-disabled"
+            type="button"
+            disabled
+            aria-label={`Buy ${plan.name} — coming soon`}
+            data-testid={`button-buy-now-${plan.id}`}
+          >
+            <span>Buy Now</span>
+            <span className="package-buy-status">Coming Soon</span>
+          </button>
+        </div>
         <h3>{plan.name}</h3>
         <div className="price" data-testid={`text-price-${plan.id}`}><small className="proposed-label">Proposed price</small><span>{plan.proposedPrice}</span></div>
       </div>
       <ul className="package-inclusions" aria-label={`${plan.name} inclusions`}>
         {plan.inclusions.map((inclusion, index) => <li key={inclusion} data-testid={`package-inclusion-${plan.id}-${index}`}><Check size={15} aria-hidden="true" /><span>{inclusion}</span></li>)}
       </ul>
-      <button
-        className="btn btn-outline package-buy-disabled"
-        type="button"
-        disabled
-        aria-label={`Buy ${plan.name} — coming soon`}
-        data-testid={`button-buy-now-${plan.id}`}
-      >
-        <span>Buy Now</span>
-        <span className="package-buy-status">Coming Soon</span>
-      </button>
     </article>)}</div>
     <p className="price-note" data-testid="notice-proposed-pricing">Proposed prices only — these are not confirmed public offers. Checkout is unavailable and no payment is collected on this website.</p>
   </div></section>;
