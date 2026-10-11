@@ -20,3 +20,9 @@ Do not create tables, change the database schema, activate real customer cards, 
 **Why:** The user explicitly set these scope and privacy restrictions.
 
 **How to apply:** Keep verification mocked or non-mutating unless the user provides new explicit authorization. Check the new account's environment-variable names separately without printing values.
+
+For the frontend catalog, Basic at ₹299 and Smart at ₹549 are proposed only; both list one QR tag, a scan landing page, owner activation, and existing visitor contact actions. These prices and inclusions are not confirmed for public sale. Family at ₹789 is a draft with unconfirmed contents.
+
+**Why:** The user specified that the catalog is design-only until public-sale details are confirmed and checkout must remain disabled.
+
+**How to apply:** Label Basic and Smart as proposed, do not collect payment, and do not present Family as purchasable or show invented contents.

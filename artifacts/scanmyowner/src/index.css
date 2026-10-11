@@ -744,6 +744,52 @@ h1,h2,h3,p { margin-top:0; }
  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
+/* Package clarity: proposed pricing, shared inclusions, and no implied checkout. */
+.pricing-grid { align-items:stretch;gap:18px;max-width:790px; }
+.package-card { display:flex;flex-direction:column;min-height:100%;padding:30px; }
+.package-card-smart { border-color:#c9dccd;background:linear-gradient(150deg,#f6faf3,#edf5eb); }
+.package-card-heading { min-height:143px; }
+.package-status { display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#edf4ec;color:#43664e;font-size:9px;font-weight:800;letter-spacing:.55px;text-transform:uppercase; }
+.package-card-smart .package-status { background:#dcebdd;color:#246346; }
+.package-card h3 { margin:15px 0 9px;font-size:17px;letter-spacing:-.35px;text-transform:none;color:#193d2e; }
+.package-card .price { display:flex;flex-direction:column;gap:3px;font-size:36px;letter-spacing:-1.6px; }
+.package-card .price .proposed-label { order:-1;color:#78877d;font-size:10px;letter-spacing:.03em;font-weight:650; }
+.package-inclusions { display:grid;gap:13px;list-style:none;padding:20px 0 22px;margin:0 0 19px;border-top:1px solid #e8ece4;flex:1; }
+.package-inclusions li { display:flex;align-items:flex-start;gap:10px;color:#506458;font-size:12px;line-height:1.55; }
+.package-inclusions li svg { flex:none;margin-top:2px;color:#26764c; }
+.package-card .btn { margin-top:auto; }
+.price-note { max-width:690px;margin:22px auto 0;color:#65766a;font-size:11px;line-height:1.7; }
+.pricing-detail-section { background:#fbfcf8; }
+.pricing-detail-intro { display:grid;grid-template-columns:minmax(0,1fr) 220px;align-items:center;gap:52px;max-width:920px;margin:0 auto 36px; }
+.pricing-detail-intro h2 { max-width:680px;margin:13px 0;color:#19382c;font-size:clamp(31px,4vw,43px);line-height:1.1;letter-spacing:-2px; }
+.pricing-detail-intro p { max-width:650px;margin:0;color:#65786c;font-size:14px;line-height:1.8; }
+.pricing-detail-intro img { display:block;width:100%;border:1px solid #dce6de;border-radius:18px;background:#edf4ec;box-shadow:0 14px 34px #173c2510; }
+.pricing-detail-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px; }
+.pricing-detail-panel { min-height:204px;padding:23px;border:1px solid #e1e7dd;border-radius:18px;background:#f5f7f0; }
+.pricing-detail-panel:nth-child(2) { background:#edf4ec;border-color:#d8e6d8; }
+.pricing-detail-number { color:#e97527;font-size:10px;font-weight:850;letter-spacing:1.2px; }
+.pricing-detail-panel h3 { margin:15px 0 9px;color:#193d2e;font-size:16px;letter-spacing:-.3px; }
+.pricing-detail-panel p { margin:0;color:#65766b;font-size:12px;line-height:1.75; }
+.pricing-detail-link { display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:12px;font-weight:700; }
+.pricing-flow-note { max-width:800px;margin:20px auto 0;padding:13px 16px;border:1px solid #eadfbe;border-radius:12px;background:#fff8e8;color:#6d5a31;font-size:11px;line-height:1.65; }
+.pricing-questions { display:flex;justify-content:center;align-items:center;gap:8px 15px;flex-wrap:wrap;margin-top:26px;color:#64766d;font-size:12px; }
+.pricing-questions .route-link { display:inline-flex;align-items:center;gap:5px;font-weight:750; }
+@media(max-width:700px) {
+  .pricing-grid { grid-template-columns:1fr;gap:14px;max-width:470px; }
+  .package-card { min-height:0;padding:24px; }
+  .package-card-heading { min-height:0;padding-bottom:20px; }
+  .package-inclusions { padding-top:18px; }
+  .pricing-detail-section { padding-top:58px;padding-bottom:58px; }
+  .pricing-detail-intro { grid-template-columns:1fr;gap:20px;text-align:center;margin-bottom:27px; }
+  .pricing-detail-intro .eyebrow { justify-content:center; }
+  .pricing-detail-intro h2,.pricing-detail-intro p { margin-left:auto;margin-right:auto; }
+  .pricing-detail-intro img { width:min(100%,300px);margin:0 auto; }
+  .pricing-detail-grid { grid-template-columns:1fr;gap:10px; }
+  .pricing-detail-panel { min-height:0;padding:20px; }
+  .pricing-detail-panel h3 { margin-top:10px; }
+  .pricing-questions { flex-direction:column;gap:7px;text-align:center; }
+}
+
 /* Contemporary, device-native expression: soft mineral surfaces, ink-green type,
    and a crisp signal-orange accent. */
 :root {

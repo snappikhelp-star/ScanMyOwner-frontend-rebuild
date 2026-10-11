@@ -60,7 +60,7 @@ function Header() {
       </nav>
       <div className="nav-actions">
         <Link className="text-link" href="/login" data-testid="nav-login">Login</Link>
-        <Link className="btn btn-primary btn-small" href="/pricing" data-testid="nav-get-tag">Get your tag <ArrowRight size={15} /></Link>
+        <Link className="btn btn-primary btn-small" href="/pricing" data-testid="nav-get-tag">View packages <ArrowRight size={15} /></Link>
       </div>
       <button className="menu-button" aria-label={open ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={open} onClick={() => setOpen(!open)} data-testid="button-mobile-menu">
         {open ? <X size={20} /> : <Menu size={20} />}
@@ -70,7 +70,7 @@ function Header() {
       {navItems.map((item) => <Link href={item.href} key={item.text} data-testid={`mobile-${item.text.toLowerCase().replaceAll(' ', '-')}`}>{item.text}</Link>)}
       <Link className="btn btn-primary btn-small mobile-activate" href="/activate" data-testid="mobile-activate-qr">Activate Your QR <ArrowRight size={14} /></Link>
       <Link href="/login" data-testid="mobile-login">Login</Link>
-      <Link href="/pricing" data-testid="mobile-get-tag">Get your tag <ArrowRight size={14} /></Link>
+      <Link href="/pricing" data-testid="mobile-get-tag">View packages <ArrowRight size={14} /></Link>
     </div>
   </header>;
 }
@@ -83,7 +83,7 @@ function Footer() {
           <span className="footer-campaign-label">A smarter way to stay connected</span>
           <h2>Your vehicle. Your privacy. One simple scan.</h2>
           <p>Give people a better way to reach you when it matters.</p>
-          <Link className="btn btn-orange" href="/pricing" data-testid="footer-campaign-cta">Get your QR tag <ArrowRight size={15} /></Link>
+          <Link className="btn btn-orange" href="/pricing" data-testid="footer-campaign-cta">View packages <ArrowRight size={15} /></Link>
         </div>
         <img src={footerCampaignImage} alt="ScanMyOwner QR tag on a vehicle with ways to contact the owner" loading="lazy" />
       </div>
@@ -244,21 +244,109 @@ function ProductExpansion() {
   </div></div></section>;
 }
 
-function PricingCards() {
-  const plans = [{ name: 'BASIC', price: '₹399', smart: false }, { name: 'SMART', price: '₹499', smart: true }];
+type PackageCatalogEntry = {
+  id: string;
+  name: string;
+  proposedPrice: string;
+  status: 'proposed' | 'draft';
+  inclusions: string[];
+};
+
+const packageCatalog: PackageCatalogEntry[] = [
+  {
+    id: 'basic',
+    name: 'Basic',
+    proposedPrice: '₹299',
+    status: 'proposed',
+    inclusions: [
+      'One ScanMyOwner QR tag',
+      'QR scan landing page',
+      'Owner activation flow',
+      'Visitor contact actions supported by the existing QR flow',
+    ],
+  },
+  {
+    id: 'smart',
+    name: 'Smart',
+    proposedPrice: '₹549',
+    status: 'proposed',
+    inclusions: [
+      'One ScanMyOwner QR tag',
+      'QR scan landing page',
+      'Owner activation flow',
+      'Visitor contact actions supported by the existing QR flow',
+    ],
+  },
+  {
+    id: 'family',
+    name: 'Family',
+    proposedPrice: '₹789',
+    status: 'draft',
+    inclusions: [],
+  },
+];
+
+function PricingCards({ detail = false }: { detail?: boolean }) {
+  const plans = packageCatalog.filter((plan) => plan.status === 'proposed');
   return <section className="section pricing-section" id="pricing"><div className="container">
-    <div className="section-head"><Eyebrow>Simple, upfront pricing</Eyebrow><h2>Start simple.</h2><p>Choose the tag that feels right. Checkout is a preview only at this stage.</p></div>
-    <div className="pricing-grid">{plans.map((plan) => <article className={`price-card${plan.smart ? ' popular' : ''}`} key={plan.name} data-testid={`pricing-card-${plan.name.toLowerCase()}`}>
-      {plan.smart && <span className="popular-label">MOST POPULAR</span>}
-       <h3>{plan.name}</h3><div className="price" data-testid={`text-price-${plan.name.toLowerCase()}`}>{plan.price} <small>/ tag</small></div>
-        <p>A ScanMyOwner QR contact tag for your vehicle.</p><Link href="/how-it-works" className={`btn ${plan.smart ? 'btn-primary' : 'btn-outline'}`} data-testid={`button-choose-${plan.name.toLowerCase()}`}>See how it works <ArrowRight size={15} /></Link>
+    <div className="section-head"><Eyebrow>{detail ? 'Proposed packages' : 'Package preview'}</Eyebrow><h2>{detail ? 'One tag. A clearer way to connect.' : 'Start with the essentials.'}</h2><p>{detail ? 'The proposed Basic and Smart packages currently list the same inclusions. Prices are for design preview only.' : 'See what is currently defined for each package. Checkout is not available.'}</p></div>
+    <div className="pricing-grid">{plans.map((plan) => <article className={`price-card package-card package-card-${plan.id}`} key={plan.id} data-testid={`pricing-card-${plan.id}`}>
+      <div className="package-card-heading">
+        <span className="package-status">Proposed package</span>
+        <h3>{plan.name}</h3>
+        <div className="price" data-testid={`text-price-${plan.id}`}><small className="proposed-label">Proposed price</small><span>{plan.proposedPrice}</span></div>
+      </div>
+      <ul className="package-inclusions" aria-label={`${plan.name} inclusions`}>
+        {plan.inclusions.map((inclusion, index) => <li key={inclusion} data-testid={`package-inclusion-${plan.id}-${index}`}><Check size={15} aria-hidden="true" /><span>{inclusion}</span></li>)}
+      </ul>
+      <Link href="/how-it-works" className={`btn ${plan.id === 'smart' ? 'btn-primary' : 'btn-outline'}`} data-testid={`link-package-how-${plan.id}`}>See how it works <ArrowRight size={15} /></Link>
     </article>)}</div>
-    <p className="price-note">Demo pricing · No payment will be collected on this website.</p>
+    <p className="price-note" data-testid="notice-proposed-pricing">Proposed prices only — these are not confirmed public offers. Checkout is unavailable and no payment is collected on this website.</p>
   </div></section>;
 }
 
+function PricingProductDetails() {
+  return <section className="section pricing-detail-section" aria-labelledby="pricing-detail-title">
+    <div className="container">
+      <div className="pricing-detail-intro">
+        <div>
+          <Eyebrow>What the tag does</Eyebrow>
+          <h2 id="pricing-detail-title">A simple route from scan to owner activation.</h2>
+          <p>A ScanMyOwner QR tag opens a vehicle contact page in a phone browser. The owner can connect the tag to their vehicle through the existing activation flow.</p>
+        </div>
+        <img src={cardImage} alt="ScanMyOwner QR contact tag" loading="lazy" />
+      </div>
+      <div className="pricing-detail-grid">
+        <article className="pricing-detail-panel">
+          <span className="pricing-detail-number">01</span>
+          <h3>Scan and choose</h3>
+          <p>A visitor scans the tag and sees the QR landing page with contact-reason options such as No Parking, Lights On, Emergency and Other.</p>
+        </article>
+        <article className="pricing-detail-panel">
+          <span className="pricing-detail-number">02</span>
+          <h3>Keep the number private</h3>
+          <p>The owner’s personal number is not shown on the public scan page. It is not printed on the tag as a public contact number.</p>
+        </article>
+        <article className="pricing-detail-panel">
+          <span className="pricing-detail-number">03</span>
+          <h3>Activate your tag</h3>
+          <p>Enter the tag code at Activate Your QR, then continue through the existing owner and vehicle activation form.</p>
+          <Link className="route-link pricing-detail-link" href="/activate" data-testid="link-pricing-activate">Go to QR activation <ArrowRight size={14} /></Link>
+        </article>
+      </div>
+      <div className="pricing-flow-note" role="note" data-testid="notice-contact-flow-preview">
+        The current QR flow displays contact-reason options; message sending is not connected in this preview.
+      </div>
+      <div className="pricing-questions">
+        <span>Questions about scanning, activation or privacy?</span>
+        <Link className="route-link" href="/faq" data-testid="link-pricing-faq">Visit the FAQ <ArrowRight size={14} /></Link>
+      </div>
+    </div>
+  </section>;
+}
+
 const faqData = [
-  ['What happens when someone scans my QR?', 'They land on a simple ScanMyOwner page, choose a reason for getting in touch, and can send a contact request. No app is needed for the person scanning.'],
+  ['What happens when someone scans my QR?', 'They land on a simple ScanMyOwner page and can choose a reason for getting in touch. Message sending is not connected in this preview, and no app is needed to open the page.'],
   ['Is my phone number visible?', 'Your personal number is not printed on the tag or shown on the public scan page. ScanMyOwner is designed to help keep your contact private.'],
   ['Does the scanner need an app?', 'No. A phone camera can scan the QR code and open the contact page in a browser.'],
   ['Can I change my vehicle later?', 'Vehicle details can be updated in a future product experience. This frontend preview does not save configuration changes.'],
@@ -283,7 +371,7 @@ function FAQSection({ full = false }: { full?: boolean }) {
 
 function FinalCTA() {
   return <section className="cta"><div className="container cta-inner"><div><h2>Your vehicle.<br />Your privacy.<br />One simple scan.</h2><p>Give people a better way to reach you when it matters.</p></div>
-     <div className="cta-art"><img src={cardImage} alt="ScanMyOwner QR tag product card" /><Link className="btn btn-orange" href="/pricing" data-testid="button-final-get-tag">Get your QR tag <ArrowRight size={15} /></Link></div>
+     <div className="cta-art"><img src={cardImage} alt="ScanMyOwner QR tag product card" /><Link className="btn btn-orange" href="/pricing" data-testid="button-final-get-tag">View packages <ArrowRight size={15} /></Link></div>
   </div></section>;
 }
 
@@ -291,7 +379,7 @@ function Hero() {
   return <section className="hero"><div className="container hero-grid">
     <div><Eyebrow>SMART QR CONTACT</Eyebrow><h1>Need to reach the owner?<br />Just <em>scan.</em></h1>
       <p className="hero-copy">One smart QR tag that lets people contact you when your vehicle needs your attention — without exposing your personal number.</p>
-      <div className="hero-actions"><Link className="btn btn-primary" href="/pricing" data-testid="button-hero-get-tag">Get your QR tag <ArrowRight size={16} /></Link><Link className="btn btn-orange" href="/activate" data-testid="button-hero-activate">Activate Your QR <ArrowRight size={16} /></Link><Link className="btn btn-outline" href="/how-it-works" data-testid="button-hero-how">How it works</Link></div>
+      <div className="hero-actions"><Link className="btn btn-primary" href="/pricing" data-testid="button-hero-get-tag">View packages <ArrowRight size={16} /></Link><Link className="btn btn-orange" href="/activate" data-testid="button-hero-activate">Activate Your QR <ArrowRight size={16} /></Link><Link className="btn btn-outline" href="/how-it-works" data-testid="button-hero-how">How it works</Link></div>
       <div className="trust-points"><span><Check size={14} />Private contact</span><span><Check size={14} />No app needed</span><span><Check size={14} />Works with any phone</span></div>
       <SearchLookup />
     </div>
@@ -313,7 +401,7 @@ function PageHero({ eyebrow, title, text }: { eyebrow: string; title: string; te
   return <div className="page-hero"><div className="container"><Eyebrow>{eyebrow}</Eyebrow><h1>{title}</h1><p>{text}</p></div></div>;
 }
 function PricingPage() {
-  return <><Meta title="Pricing | ScanMyOwner" description="Explore ScanMyOwner vehicle QR tag pricing. Simple frontend demo pricing for Basic and Smart tags." /><Shell><main><PageHero eyebrow="Simple, upfront pricing" title="A little more peace of mind." text="Choose a ScanMyOwner tag for your vehicle. These prices are a preview; checkout is not enabled yet." /><PricingCards /><FinalCTA /></main></Shell></>;
+  return <><Meta title="ScanMyOwner packages | Product details" description="See the proposed ScanMyOwner Basic and Smart package details, QR scan flow, owner activation and privacy information." /><Shell><main><PageHero eyebrow="ScanMyOwner tag details" title="One small tag. A private way to connect." text="See how the QR tag, visitor landing page and owner activation fit together. Package prices shown here are proposals, not confirmed public offers." /><PricingCards detail /><PricingProductDetails /><FinalCTA /></main></Shell></>;
 }
 function HowPage() {
   return <><Meta title="How it works | ScanMyOwner" description="See how a ScanMyOwner smart QR tag helps someone reach a vehicle owner privately in three simple steps." /><Shell><main><PageHero eyebrow="A smarter way to connect" title="A scan can make all the difference." text="From a parked car to a quick solution, ScanMyOwner makes it easy to reach an owner without putting their personal number on display." /><HowSteps /><PhoneDemo /><PrivacySection /><FinalCTA /></main></Shell></>;
@@ -345,7 +433,7 @@ function LoginPage() {
     <div className="login-logo"><img src={logo} alt="ScanMyOwner" /></div><h2>Sign in</h2><p>Account access is a frontend preview only.</p><div className="demo-banner">Demo only — authentication is not enabled.</div>
     {submitted && <div className="form-success" role="status" data-testid="status-login-demo">Sign-in is not connected yet. Your details were not sent or saved.</div>}
      <form className="login-form" onSubmit={submit} data-testid="form-login"><label>Email address<input required type="email" autoComplete="username" placeholder="you@example.com" data-testid="input-login-email" /></label><label>Password<input required type="password" autoComplete="current-password" placeholder="Your password" data-testid="input-login-password" /></label><button className="btn btn-primary" type="submit" data-testid="button-login-submit">Continue <ArrowRight size={15} /></button></form>
-     <p style={{ marginTop: 18, marginBottom: 0 }}>New to ScanMyOwner? <Link className="route-link" href="/pricing">Get your tag</Link></p>
+     <p style={{ marginTop: 18, marginBottom: 0 }}>New to ScanMyOwner? <Link className="route-link" href="/pricing">View package preview</Link></p>
   </div></div></main></Shell></>;
 }
 
