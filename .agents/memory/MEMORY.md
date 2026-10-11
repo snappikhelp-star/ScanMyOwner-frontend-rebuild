@@ -2,3 +2,4 @@
 - [Supabase key handling](supabase-key-handling.md) — use public keys in browser code; keep privileged keys server-side.
 - [Continuation scope](continuation-scope.md) — preserve the imported app; minimal fixes and non-mutating verification only.
 - [Pricing provenance](pricing-provenance.md) — mockup price examples are not approved reference prices for discount claims.
+- [Product availability](product-availability.md) — vehicle QR tags are currently offered; non-vehicle tag categories are not yet available.

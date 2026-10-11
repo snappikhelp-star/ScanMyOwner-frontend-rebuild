@@ -232,15 +232,26 @@ function EverydayScanPromo() {
   </section>;
 }
 
-const categories = [
+const vehicleCategories = [
   { name: 'Car', Icon: CarFront }, { name: 'Bike', Icon: Bike }, { name: 'Scooter', Icon: Bike },
+];
+const otherCategories = [
   { name: 'Keys', Icon: KeyRound }, { name: 'Luggage', Icon: Package }, { name: 'Pets', Icon: Heart }, { name: 'Helmet', Icon: ShieldCheck },
 ];
 function ProductExpansion() {
   return <section className="expansion-section"><div className="container"><div className="expansion-panel">
-    <Eyebrow>More than a car tag</Eyebrow><h2>More than just a car tag.</h2>
-    <p>ScanMyOwner is growing into a smart-tag platform for the things and companions that are part of everyday life.</p>
-    <div className="category-row">{categories.map(({ name, Icon }) => <div className="category" key={name} data-testid={`category-${name.toLowerCase()}`}><Icon size={17} />{name}</div>)}</div>
+    <Eyebrow>Available now: vehicle tags</Eyebrow><h2>Vehicle tags are here. More are coming soon.</h2>
+    <p>ScanMyOwner currently offers vehicle QR tags. Other tags for keys, luggage, pets, and helmets are coming soon.</p>
+    <div className="category-groups">
+      <section className="category-group" aria-label="Vehicle tags available now">
+        <div className="category-group-heading"><h3>Vehicle</h3><span className="category-status category-status-available">Available now</span></div>
+        <div className="category-row">{vehicleCategories.map(({ name, Icon }) => <div className="category" key={name} data-testid={`category-${name.toLowerCase()}`}><Icon size={17} />{name}</div>)}</div>
+      </section>
+      <section className="category-group category-group-coming" aria-label="Other tags coming soon">
+        <div className="category-group-heading"><h3>Other tags</h3><span className="category-status category-status-coming">Coming Soon</span></div>
+        <div className="category-row">{otherCategories.map(({ name, Icon }) => <div className="category category-coming" key={name} data-testid={`category-${name.toLowerCase()}`}><Icon size={17} />{name}<span className="category-coming-soon">Coming Soon</span></div>)}</div>
+      </section>
+    </div>
   </div></div></section>;
 }
 

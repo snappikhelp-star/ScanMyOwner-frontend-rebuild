@@ -964,3 +964,26 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   .benefits li:first-child { margin-left:0; }
   .footer-campaign { border-radius:18px; }
 }
+.category-groups { display:grid;gap:18px;max-width:960px;margin:30px auto 0;text-align:left; }
+.category-group { padding:20px 22px;border:1px solid #dce8db;border-radius:20px;background:#ffffffbf; }
+.category-group-coming { border-color:#efc9a8;background:linear-gradient(135deg,#fff9f1,#fff3e5);box-shadow:0 12px 30px #9d4d1712; }
+.category-group-heading { display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px; }
+.category-group-heading h3 { margin:0;color:var(--smo-ink);font-size:14px;font-weight:800;letter-spacing:-.2px; }
+.category-status { display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;font-size:9px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap; }
+.category-status-available { color:#215e3d;background:#e2f0e4;border:1px solid #c9e1ce; }
+.category-status-coming { color:#fff;background:#d96520;border:1px solid #d96520;box-shadow:0 6px 14px #c85e1924; }
+.category-group .category-row { justify-content:flex-start;gap:10px; }
+.category-group .category { background:#f3f7f2;border-color:#dce8db;cursor:default; }
+.category-group .category:hover { transform:none;background:#f3f7f2; }
+.category-group-coming .category { color:#593f2c;background:#fff;border-color:#f0c8a5; }
+.category-group-coming .category svg { color:#ca631f; }
+.category-group-coming .category:hover { background:#fff; }
+.category-coming-soon { display:inline-flex;align-items:center;margin-left:2px;padding:4px 7px;border-radius:999px;color:#fff;background:#e87527;font-size:8px;line-height:1;font-weight:900;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap; }
+@media(max-width:700px) {
+  .category-groups { gap:12px;margin-top:24px; }
+  .category-group { padding:15px;border-radius:16px; }
+  .category-group-heading { align-items:flex-start;flex-direction:column;gap:8px; }
+  .category-group .category-row { gap:8px; }
+  .category-group .category { padding:9px 10px;gap:7px;font-size:10px; }
+  .category-coming-soon { padding:4px 6px;font-size:7px; }
+}
