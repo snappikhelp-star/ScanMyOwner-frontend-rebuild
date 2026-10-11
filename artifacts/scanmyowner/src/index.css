@@ -757,6 +757,7 @@ h1,h2,h3,p { margin-top:0; }
 .package-card-topline .package-status { white-space:nowrap; }
 .package-card h3 { margin:15px 0 9px;font-size:17px;letter-spacing:-.35px;text-transform:none;color:#193d2e; }
 .package-card .price { display:flex;flex-direction:column;gap:3px;font-size:36px;letter-spacing:-1.6px; }
+.package-card .price span { color:#21824d;font-weight:850; }
 .package-card .price .proposed-label { order:-1;color:#78877d;font-size:10px;letter-spacing:.03em;font-weight:650; }
 .package-inclusions { display:grid;gap:13px;list-style:none;padding:20px 0 22px;margin:0 0 19px;border-top:1px solid #e8ece4;flex:1; }
 .package-inclusions li { display:flex;align-items:flex-start;gap:10px;color:#506458;font-size:12px;line-height:1.55; }
