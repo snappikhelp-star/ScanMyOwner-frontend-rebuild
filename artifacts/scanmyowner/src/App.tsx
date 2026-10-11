@@ -305,10 +305,10 @@ function PricingCards({ detail = false }: { detail?: boolean }) {
         className="btn btn-primary package-buy-disabled"
         type="button"
         disabled
-        aria-label={`${plan.name} Pack — coming soon`}
-        data-testid={`button-coming-soon-${plan.id}`}
+        aria-label={`Buy ${plan.name} Pack — checkout unavailable`}
+        data-testid={`button-buy-now-${plan.id}`}
       >
-        Coming Soon
+        Buy Now
       </button>
     </article>)}</div>
     <p className="price-note" data-testid="notice-proposed-pricing">Prices are proposals, not confirmed public offers. Basic and Smart inclusions are proposed; Family Pack contents remain in draft. Checkout is unavailable and no payment is collected on this website.</p>
