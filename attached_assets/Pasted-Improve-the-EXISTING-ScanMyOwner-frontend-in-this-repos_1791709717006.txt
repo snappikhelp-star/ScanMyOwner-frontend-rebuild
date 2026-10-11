@@ -1,0 +1,63 @@
+Improve the EXISTING ScanMyOwner frontend in this repository. Do not rebuild the project from scratch.
+
+**Main goal:** Make the existing homepage, product cards, and product detail page polished, professional, mobile-friendly, and conversion-focused so customers can understand and purchase ScanMyOwner QR tags.
+
+### 1. Audit before editing
+- Inspect the existing frontend routes, components, styling, package scripts, and product-related files.
+- Identify the current homepage, product cards, product details, pricing, and checkout/order flow.
+- Reuse existing components and design tokens wherever possible.
+- Make targeted changes only; avoid unnecessary dependencies and large refactors.
+
+### 2. Improve the product cards
+Use the existing ScanMyOwner brand identity: white, mint green, cream, and bright orange accents. Keep the design clean, premium, trustworthy, and suitable for Indian customers.
+
+Display the existing three package prices:
+- ₹299
+- ₹549
+- ₹789
+
+First inspect the current package definitions and descriptions. Preserve existing package names, benefits, and pricing rules where available. Do not invent features, discounts, delivery promises, or payment claims.
+
+Each card should have:
+- A clear product/tag visual using existing assets when available.
+- Package name, price, and concise benefits.
+- A clear “View Details” or “Buy Now” action connected to the existing supported route or flow.
+- Consistent card heights, readable typography, proper spacing, and responsive mobile layout.
+
+### 3. Improve the product detail page
+Reuse the current route if one exists. Add or improve:
+- Product overview and key benefits.
+- How the QR tag works: scan, contact action, owner activation.
+- A clear explanation that the owner's personal contact number is not publicly displayed, consistent with actual backend behavior.
+- Package contents based only on verified existing product information.
+- FAQs and a clear purchase CTA.
+- Mobile-friendly layout and accessible buttons.
+
+Do not create fake testimonials, fake reviews, unsupported security guarantees, or placeholder payment success screens.
+
+### 4. Protect existing functionality — critical
+Do NOT modify:
+- QR status lookup or `/t/:code` behavior.
+- QR activation form, claim-code validation, or activation API.
+- Supabase schema, RPCs, credentials, or security policies.
+- Backend API routes, Render configuration, HMAC key, or environment variables.
+- Existing order/payment logic except where a frontend link must be connected to an already implemented flow.
+
+Do not generate, insert, activate, or delete any QR cards. Do not expose private claim codes or secrets.
+
+### 5. Quality checks
+- Run the existing frontend build command.
+- Fix any errors caused by your changes.
+- Check all edited routes and links.
+- Confirm that product cards work on mobile and desktop.
+- Confirm the existing QR page and activation flow remain untouched.
+- If payment or checkout is not implemented, show only the existing supported next step. Do not pretend payment is working.
+
+### Execution rules
+Work in the existing codebase. Do not stop after producing an audit report; implement the focused frontend improvements in the same task. Avoid unrelated changes, do not deploy automatically, and report:
+1. Files changed.
+2. UI improvements completed.
+3. Build/test results.
+4. Any remaining checkout or payment limitations.
+
+Start with a brief audit, then implement the changes.
