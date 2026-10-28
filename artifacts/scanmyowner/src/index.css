@@ -767,9 +767,28 @@ h1,h2,h3,p { margin-top:0; }
 .package-inclusions li { display:flex;align-items:flex-start;gap:10px;color:#506458;font-size:12px;line-height:1.55; }
 .package-inclusions li svg { flex:none;margin-top:2px;color:#26764c; }
 .package-draft-note { flex:1;margin:0 0 19px;padding:20px 0 22px;border-top:1px solid #e8ece4;color:#65766a;font-size:12px;line-height:1.65; }
-.package-card .package-buy-disabled { width:100%;min-height:46px;margin-top:auto;padding:11px 16px;color:#fff;border-color:#216c47;background:#216c47;box-shadow:0 8px 18px #164a2b1a;cursor:not-allowed;font-size:12px;font-weight:800;opacity:1; }
-.package-card .package-buy-disabled:hover { transform:none;background:#216c47;box-shadow:0 8px 18px #164a2b1a; }
+.package-card .package-buy-button { width:100%;min-height:46px;margin-top:auto;padding:11px 16px;color:#fff;border-color:#216c47;background:#216c47;box-shadow:0 8px 18px #164a2b1a;font-size:12px;font-weight:800; }
+.package-card .package-buy-button:hover { transform:translateY(-1px);background:#195c3b;box-shadow:0 10px 20px #164a2b20; }
+.package-card .package-buy-button:focus-visible { outline:3px solid #e97527;outline-offset:3px; }
 .price-note { max-width:690px;margin:22px auto 0;color:#65766a;font-size:11px;line-height:1.7; }
+.checkout-dialog { width:calc(100% - 28px);max-width:520px;max-height:calc(100dvh - 28px);gap:18px;overflow-y:auto;padding:clamp(20px,5vw,32px);border-color:#dce7de;border-radius:20px;background:#fff;color:#17221a; }
+.checkout-dialog-header { gap:7px;padding-right:26px; }
+.checkout-eyebrow { color:#23794b;font-size:10px;font-weight:850;letter-spacing:1px;text-transform:uppercase; }
+.checkout-dialog-header [data-radix-dialog-title] { margin:3px 0;color:#193d2e;font-size:25px;line-height:1.2;letter-spacing:-.7px; }
+.checkout-dialog-header [data-radix-dialog-description] { color:#65766a;font-size:12px;line-height:1.65; }
+.checkout-product-summary { display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid #dce7de;border-radius:12px;background:#f3fbf5;color:#355440;font-size:13px;font-weight:700; }
+.checkout-product-summary strong { color:#21824d;font-size:19px; }
+.checkout-draft-note,.checkout-unavailable,.checkout-submit-result { margin:0;padding:12px 14px;border-radius:10px;font-size:11px;line-height:1.6; }
+.checkout-draft-note { border:1px solid #f0dfd0;background:#fff8f0;color:#845327; }
+.checkout-unavailable { border:1px solid #eadfbe;background:#fff8e8;color:#6d5a31; }
+.checkout-submit-result { border:1px solid #cfe5d3;background:#edf7ef;color:#285c31; }
+.checkout-form { display:grid;gap:13px; }
+.checkout-form label { display:grid;gap:6px;color:#526357;font-size:11px;font-weight:750; }
+.checkout-form input,.checkout-form textarea { width:100%;min-width:0;border:1px solid #dce7de;border-radius:10px;padding:11px 12px;background:#fcfcf8;color:#273b2d;font:inherit;font-size:13px;outline:none; }
+.checkout-form input:focus,.checkout-form textarea:focus { border-color:#23794b;box-shadow:0 0 0 3px #23794b14; }
+.checkout-form textarea { min-height:84px;resize:vertical; }
+.checkout-data-note { margin:0;color:#718076;font-size:10px;line-height:1.6; }
+.checkout-form .btn { width:100%;min-height:46px; }
 .pricing-detail-section { background:#fbfcf8; }
 .pricing-detail-intro { display:grid;grid-template-columns:minmax(0,1fr) 220px;align-items:center;gap:52px;max-width:920px;margin:0 auto 36px; }
 .pricing-detail-intro h2 { max-width:680px;margin:13px 0;color:#19382c;font-size:clamp(31px,4vw,43px);line-height:1.1;letter-spacing:-2px; }
@@ -794,6 +813,8 @@ h1,h2,h3,p { margin-top:0; }
   .package-card { min-height:0;padding:24px; }
   .package-card-heading { min-height:0;padding-bottom:20px; }
   .package-inclusions { padding-top:18px; }
+  .checkout-dialog { width:calc(100% - 20px);max-height:calc(100dvh - 20px);gap:15px;padding:22px 18px;border-radius:16px; }
+  .checkout-dialog-header [data-radix-dialog-title] { font-size:22px; }
   .pricing-detail-section { padding-top:58px;padding-bottom:58px; }
   .pricing-detail-intro { grid-template-columns:1fr;gap:20px;text-align:center;margin-bottom:27px; }
   .pricing-detail-intro .eyebrow { justify-content:center; }

@@ -12,6 +12,7 @@ import {
 import { Link, Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
 import NotFound from '@/pages/not-found';
 import QrCardPage from '@/pages/qr-card';
+import ProductCheckoutDialog from '@/components/product-checkout-dialog';
 
 const queryClient = new QueryClient();
 const logo = '/brand/scanmyowner-logo.webp';
@@ -306,6 +307,7 @@ const formatPackagePrice = (amount: number) =>
 
 function PricingCards({ detail = false }: { detail?: boolean }) {
   const plans = packageCatalog;
+  const [selectedPlan, setSelectedPlan] = useState<PackageCatalogEntry | null>(null);
   return <section className="section pricing-section" id="pricing"><div className="container">
     <div className="section-head"><Eyebrow>Pack discounts</Eyebrow><h2>{detail ? 'Choose a ScanMyOwner Pack' : 'Choose Your ScanMyOwner Pack'}</h2><p>{detail ? 'Compare the regular and offer prices. Family Pack has the highest savings; its contents remain in draft.' : 'Compare regular prices with offer prices. Family Pack has the highest savings, while its contents are still being confirmed.'}</p></div>
     <div className="pricing-grid">{plans.map((plan) => <article className={`price-card package-card package-card-${plan.id} package-card-${plan.status}`} key={plan.id} data-testid={`pricing-card-${plan.id}`}>
@@ -328,16 +330,21 @@ function PricingCards({ detail = false }: { detail?: boolean }) {
         {plan.inclusions.map((inclusion, index) => <li key={inclusion} data-testid={`package-inclusion-${plan.id}-${index}`}><Check size={15} aria-hidden="true" /><span>{inclusion}</span></li>)}
       </ul>}
       <button
-        className="btn btn-primary package-buy-disabled"
+        className="btn btn-primary package-buy-button"
         type="button"
-        disabled
-        aria-label={`Buy ${plan.name} Pack — checkout unavailable`}
+        aria-label={`Open checkout for ${plan.name} Pack at ${formatPackagePrice(plan.offerPrice)}`}
+        onClick={() => setSelectedPlan(plan)}
         data-testid={`button-buy-now-${plan.id}`}
       >
-        Buy Now
+        Buy Now <ArrowRight size={15} />
       </button>
     </article>)}</div>
-    <p className="price-note" data-testid="notice-proposed-pricing">Regular and offer prices are shown for comparison. Basic and Smart inclusions remain proposed; Family Pack contents are still in draft. Checkout is unavailable, and no payment is collected on this website.</p>
+    <p className="price-note" data-testid="notice-proposed-pricing">Basic and Smart inclusions remain proposed; Family Pack contents are still in draft. Checkout is temporarily unavailable because secure payment processing is not configured. No payment is collected.</p>
+    {selectedPlan && <ProductCheckoutDialog
+      key={selectedPlan.id}
+      product={selectedPlan}
+      onClose={() => setSelectedPlan(null)}
+    />}
   </div></section>;
 }
 

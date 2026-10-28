@@ -21,8 +21,8 @@ Do not create tables, change the database schema, activate real customer cards, 
 
 **How to apply:** Keep verification mocked or non-mutating unless the user provides new explicit authorization. Check the new account's environment-variable names separately without printing values.
 
-For the frontend catalog, Basic at ₹299 and Smart at ₹549 are proposed only; both list one QR tag, a scan landing page, owner activation, and existing visitor contact actions. These prices and inclusions are not confirmed for public sale. Family at ₹789 is a draft with unconfirmed contents.
+For the frontend catalog, Basic at ₹299 and Smart at ₹549 are proposed only; both list one QR tag, a scan landing page, owner activation, and existing visitor contact actions. These prices and inclusions are not confirmed for public sale. Family at ₹749 is a draft with unconfirmed contents.
 
-**Why:** The user specified that the catalog is design-only until public-sale details are confirmed and checkout must remain disabled.
+**Why:** The user specified the catalog details and Family price, and later requested product-specific order forms while explicitly prohibiting false purchase success.
 
-**How to apply:** Label Basic and Smart as proposed, do not collect payment, and do not present Family as purchasable or show invented contents.
+**How to apply:** Label Basic and Smart as proposed and Family contents as draft. Product buttons may open a form for name, mobile, and address, but while a payment provider/order backend is unconfigured, do not send or save those details, accept an order, or claim payment or purchase success.
