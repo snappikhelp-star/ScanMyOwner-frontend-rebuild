@@ -4,8 +4,8 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import {
-  ArrowRight, Bike, CarFront, Check, CircleHelp,
-  Clock3, Heart, KeyRound, LockKeyhole, Menu, MessageCircle, Package,
+  ArrowRight, CarFront, Check, CircleHelp,
+  Clock3, KeyRound, LockKeyhole, Menu, MessageCircle,
   Plus, Search, ShieldCheck, Smartphone, Sparkles,
   X, Zap,
 } from 'lucide-react';
@@ -233,29 +233,6 @@ function EverydayScanPromo() {
   </section>;
 }
 
-const vehicleCategories = [
-  { name: 'Car', Icon: CarFront }, { name: 'Bike', Icon: Bike }, { name: 'Scooter', Icon: Bike },
-];
-const otherCategories = [
-  { name: 'Keys', Icon: KeyRound }, { name: 'Luggage', Icon: Package }, { name: 'Pets', Icon: Heart }, { name: 'Helmet', Icon: ShieldCheck },
-];
-function ProductExpansion() {
-  return <section className="expansion-section"><div className="container"><div className="expansion-panel">
-    <Eyebrow>Available now: vehicle tags</Eyebrow><h2>Vehicle tags are here. More are coming soon.</h2>
-    <p>ScanMyOwner currently offers vehicle QR tags. Other tags for keys, luggage, pets, and helmets are coming soon.</p>
-    <div className="category-groups">
-      <section className="category-group" aria-label="Vehicle tags available now">
-        <div className="category-group-heading"><h3>Vehicle</h3><span className="category-status category-status-available">Available now</span></div>
-        <div className="category-row">{vehicleCategories.map(({ name, Icon }) => <div className="category" key={name} data-testid={`category-${name.toLowerCase()}`}><Icon size={17} />{name}</div>)}</div>
-      </section>
-      <section className="category-group category-group-coming" aria-label="Other tags coming soon">
-        <div className="category-group-heading"><h3>Other tags</h3><span className="category-status category-status-coming">Coming Soon</span></div>
-        <div className="category-row">{otherCategories.map(({ name, Icon }) => <div className="category category-coming" key={name} data-testid={`category-${name.toLowerCase()}`}><Icon size={17} />{name}<span className="category-coming-soon">Coming Soon</span></div>)}</div>
-      </section>
-    </div>
-  </div></div></section>;
-}
-
 type PackageCatalogEntry = {
   id: string;
   name: string;
@@ -307,7 +284,11 @@ const formatPackagePrice = (amount: number) =>
 
 function PricingCards({ detail = false }: { detail?: boolean }) {
   const plans = packageCatalog;
-  const [selectedPlan, setSelectedPlan] = useState<PackageCatalogEntry | null>(null);
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [selectedPlan, setSelectedPlan] = useState<{ product: PackageCatalogEntry; quantity: number } | null>(null);
+  function adjustQuantity(id: string, delta: number) {
+    setQuantities((current) => ({ ...current, [id]: Math.max(1, (current[id] ?? 1) + delta) }));
+  }
   return <section className="section pricing-section" id="pricing"><div className="container">
     <div className="section-head"><Eyebrow>Pack discounts</Eyebrow><h2>{detail ? 'Choose a ScanMyOwner Pack' : 'Choose Your ScanMyOwner Pack'}</h2><p>{detail ? 'Compare the regular and offer prices. Family Pack has the highest savings; its contents remain in draft.' : 'Compare regular prices with offer prices. Family Pack has the highest savings, while its contents are still being confirmed.'}</p></div>
     <div className="pricing-grid">{plans.map((plan) => <article className={`price-card package-card package-card-${plan.id} package-card-${plan.status}`} key={plan.id} data-testid={`pricing-card-${plan.id}`}>
@@ -326,6 +307,14 @@ function PricingCards({ detail = false }: { detail?: boolean }) {
           <small className="package-savings">You save {formatPackagePrice(plan.regularPrice - plan.offerPrice)}</small>
         </div>
       </div>
+      <div className="package-quantity" role="group" aria-label={`Quantity for ${plan.name} Pack`}>
+        <span className="package-quantity-label">Quantity</span>
+        <div className="quantity-control">
+          <button type="button" aria-label={`Decrease ${plan.name} Pack quantity`} disabled={(quantities[plan.id] ?? 1) <= 1} onClick={() => adjustQuantity(plan.id, -1)} data-testid={`button-quantity-decrease-${plan.id}`}>−</button>
+          <output aria-live="polite" aria-label={`${plan.name} Pack quantity`} data-testid={`text-quantity-${plan.id}`}>{quantities[plan.id] ?? 1}</output>
+          <button type="button" aria-label={`Increase ${plan.name} Pack quantity`} onClick={() => adjustQuantity(plan.id, 1)} data-testid={`button-quantity-increase-${plan.id}`}>+</button>
+        </div>
+      </div>
       {plan.status === 'draft' ? <p className="package-draft-note">Package contents are being confirmed. No inclusions are listed yet.</p> : <ul className="package-inclusions" aria-label={`${plan.name} proposed inclusions`}>
         {plan.inclusions.map((inclusion, index) => <li key={inclusion} data-testid={`package-inclusion-${plan.id}-${index}`}><Check size={15} aria-hidden="true" /><span>{inclusion}</span></li>)}
       </ul>}
@@ -333,16 +322,17 @@ function PricingCards({ detail = false }: { detail?: boolean }) {
         className="btn btn-primary package-buy-button"
         type="button"
         aria-label={`Open checkout for ${plan.name} Pack at ${formatPackagePrice(plan.offerPrice)}`}
-        onClick={() => setSelectedPlan(plan)}
+        onClick={() => setSelectedPlan({ product: plan, quantity: quantities[plan.id] ?? 1 })}
         data-testid={`button-buy-now-${plan.id}`}
       >
         Buy Now <ArrowRight size={15} />
       </button>
     </article>)}</div>
-    <p className="price-note" data-testid="notice-proposed-pricing">Basic and Smart inclusions remain proposed; Family Pack contents are still in draft. Checkout is temporarily unavailable because secure payment processing is not configured. No payment is collected.</p>
+    <p className="price-note" data-testid="notice-proposed-pricing">Basic and Smart inclusions remain proposed; Family Pack contents are still being confirmed. This is a checkout preview only—orders and payments are not enabled.</p>
     {selectedPlan && <ProductCheckoutDialog
-      key={selectedPlan.id}
-      product={selectedPlan}
+      key={selectedPlan.product.id}
+      product={selectedPlan.product}
+      quantity={selectedPlan.quantity}
       onClose={() => setSelectedPlan(null)}
     />}
   </div></section>;
@@ -436,7 +426,7 @@ function Hero() {
 
 function Home() {
   return <><Meta title="ScanMyOwner — Scan. Connect. Stay Private." description="A smart QR contact tag for your vehicle. Let people reach you when it matters, without exposing your personal number." />
-     <Shell><main><Hero /><PricingCards /><TrustStrip /><ProblemSection /><EverydayScanPromo /><HowSteps /><PhoneDemo /><PrivacySection /><FeaturesBento /><ProductExpansion /><FAQSection /><FinalCTA /></main></Shell>
+      <Shell><main><Hero /><PricingCards /><TrustStrip /><ProblemSection /><EverydayScanPromo /><HowSteps /><PhoneDemo /><PrivacySection /><FeaturesBento /><FAQSection /><FinalCTA /></main></Shell>
   </>;
 }
 
